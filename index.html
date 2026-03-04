@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hari Ki Dukaan - Bihar</title>
+    <style>
+        :root {
+            --zepto-green: #00D672;
+            --zepto-dark: #004d2b;
+            --bg-color: #f5f5f5;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            padding-bottom: 100px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2E7D32, #4CAF50);
+            padding: 25px 15px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: moveBackground 20s linear infinite;
+        }
+
+        @keyframes moveBackground {
+            0% { background-position: 0 0; }
+            100% { background-position: 30px 30px; }
+        }
+
+        .logo-area {
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 900;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo span { 
+            color: #FFD700;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .slogan {
+            font-size: 16px;
+            margin-top: 10px;
+            color: #E8F5E9;
+            font-weight: 500;
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .location-status {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 15px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 12px;
+            display: inline-block;
+            animation: fadeIn 1s ease-out 1s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .categories {
+            display: flex;
+            overflow-x: auto;
+            padding: 10px;
+            background: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .cat-pill {
+            background: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-right: 10px;
+            white-space: nowrap;
+            color: #555;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .cat-pill:hover {
+            background: var(--zepto-green);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .cat-pill.active {
+            background: var(--zepto-green);
+            color: white;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '🔥';
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeInCard 0.5s ease-out both;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        @keyframes fadeInCard {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .product-img {
+            width: 100%;
+            height: 120px;
+            background-color: #eee;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 12px;
+            overflow: hidden;
+        }
+
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: var(--zepto-dark);
+            margin-bottom: 10px;
+        }
+
+        .order-btn {
+            background-color: var(--zepto-green);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            animation: pulseBtn 2s infinite;
+        }
+
+        @keyframes pulseBtn {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 214, 114, 0.7); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 214, 114, 0); }
+        }
+
+        .order-btn:hover {
+            background-color: var(--zepto-dark);
+            transform: scale(1.02);
+        }
+
+        .payment-info {
+            background: white;
+            padding: 20px;
+            margin: 20px 15px;
+            border-radius: 12px;
+            border-left: 5px solid var(--zepto-green);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .payment-info h3 {
+            color: var(--zepto-dark);
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .payment-info p {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            margin: 5px 0;
+        }
+
+        .call-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-decoration: none;
+            z-index: 2000;
+            animation: bounceBtn 2s infinite;
+        }
+
+        @keyframes bounceBtn {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-size: 12px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .location-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .location-modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 90%;
+            width: 400px;
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .location-modal h3 {
+            color: var(--zepto-dark);
+            margin-top: 0;
+        }
+
+        .location-modal p {
+            color: #555;
+            margin: 10px 0;
+        }
+
+        .location-modal button {
+            background: var(--zepto-green);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--zepto-green);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <div class="logo">हरी जी <span> का दुकान</span></div>
+        </div>
+        <div class="slogan">घर बैठे मंगाएँ सब कुछ, बस एक क्लिक दूर!</div>
+        <div class="location-status" id="location-status">
+            📍 Location: Loading...
+        </div>
+    </header>
+
+    <div class="categories">
+        <div class="cat-pill active">Sabhi (All)</div>
+        <div class="cat-pill">Khana (Food)</div>
+        <div class="cat-pill">Kirana</div>
+        <div class="cat-pill">Snacks</div>
+        <div class="cat-pill">Oil & Masala</div>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">🔥 Aaj Ka Special</h2>
+        <div class="product-grid" id="product-list">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading Products...</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="payment-info">
+        <h3>💳 Payment Options</h3>
+        <p><strong>1. Cash on Delivery (COD)</strong> - Delivery par cash dein</p>
+        <p><strong>2. Online Payment</strong> - PhonePe, GPay, Paytm</p>
+        <p><strong>3. Call for Order</strong> - +91 98765 43210</p>
+    </div>
+
+    <a href="tel:+919876543210" class="call-btn">📞</a>
+
+    <div class="location-modal" id="location-modal">
+        <div class="location-modal-content">
+            <h3>📍 Aapki Location</h3>
+            <p id="location-text">Location mil rahi hai...</p>
+            <button onclick="closeModal()">Samajh gaya</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 Hari Ki Dukaan - Bihar</p>
+        <p>Delivery in 30 Mins (Jab bhi possible ho)</p>
+    </footer>
+
+    <script>
+    const products = [
+        { id: 1, name: "Litti Chokha (2pcs)", price: 40, img: "🍛", category: "Food" },
+        { id: 2, name: "Samosa (2pcs)", price: 20, img: "🥟", category: "Food" },
+        { id: 3, name: "Pakoda (Plate)", price: 30, img: "🍘", category: "Food" },
+        { id: 4, name: "Curd (1L)", price: 20, img: "🥛", category: "Food" },
+        { id: 5, name: "Rice (1kg)", price: 60, img: "🍚", category: "Kirana" },
+        { id: 6, name: "Aata (1kg)", price: 35, img: "🌾", category: "Kirana" },
+        { id: 7, name: "Oil (1L)", price: 140, img: "🛢️", category: "Oil & Masala" },
+        { id: 8, name: "Pulse (1kg)", price: 80, img: "🫘", category: "Kirana" },
+        { id: 9, name: "Masala (100g)", price: 10, img: "🧂", category: "Oil & Masala" },
+        { id: 10, name: "Soyabean (1kg)", price: 90, img: "🫘", category: "Kirana" },
+        { id: 11, name: "Chai (1kg)", price: 120, img: "🍵", category: "Kirana" },
+        { id: 12, name: "Biscuit Packet", price: 10, img: "🍪", category: "Snacks" },
+        { id: 13, name: "Namkeen (250g)", price: 25, img: "🥨", category: "Snacks" }
+    ];
+
+    const productList = document.getElementById("product-list");
+    const categoryPills = document.querySelectorAll(".cat-pill");
+
+    function renderProducts(filter = "All") {
+        productList.innerHTML = "";
+
+        const filteredProducts = filter === "All"
+            ? products
+            : products.filter(p => p.category === filter);
+
+        if (filteredProducts.length === 0) {
+            productList.innerHTML = "<p>No products found.</p>";
+            return;
+        }
+
+        filteredProducts.forEach(product => {
+            const card = document.createElement("div");
+            card.className = "product-card";
+            card.innerHTML = `
+                <div class="product-img">${product.img}</div>
+                <div class="product-name">${product.name}</div>
+                <div class="product-price">₹${product.price}</div>
+                <button class="order-btn" onclick="orderNow('${product.name}', ${product.price})">
+                    🛒 Order Now
+                </button>
+            `;
+            productList.appendChild(card);
+        });
+    }
+
+    function orderNow(name, price) {
+        const phoneNumber = "919876543210";
+        const message = `Namaste! Mujhe ${name} (₹${price}) order karna hai.`;
+        const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+        window.open(url, "_blank");
+    }
+
+    categoryPills.forEach(pill => {
+        pill.addEventListener("click", () => {
+            document.querySelector(".cat-pill.active").classList.remove("active");
+            pill.classList.add("active");
+
+            let categoryText = pill.textContent;
+            if (categoryText.includes("Sabhi")) renderProducts("All");
+            else if (categoryText.includes("Khana")) renderProducts("Food");
+            else if (categoryText.includes("Kirana")) renderProducts("Kirana");
+            else if (categoryText.includes("Snacks")) renderProducts("Snacks");
+            else if (categoryText.includes("Oil")) renderProducts("Oil & Masala");
+        });
+    });
+
+    // Location Detection
+    const locationStatus = document.getElementById("location-status");
+    const locationModal = document.getElementById("location-modal");
+    const locationText = document.getElementById("location-text");
+
+    function closeModal() {
+        locationModal.style.display = "none";
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(position => {
+                const lat = position.coords.latitude.toFixed(2);
+                const lon = position.coords.longitude.toFixed(2);
+                const locationString = `Lat: ${lat}, Lon: ${lon}`;
+                locationStatus.textContent = "📍 " + locationString;
+                locationText.textContent = "Aapki location: " + locationString;
+                locationModal.style.display = "flex";
+            }, () => {
+                locationStatus.textContent = "📍 Location permission denied";
+            });
+        } else {
+            locationStatus.textContent = "Geolocation not supported";
+        }
+    }
+
+    // Initial Load
+    window.onload = () => {
+        renderProducts();
+        getLocation();
+    };
+</script>
