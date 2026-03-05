@@ -437,25 +437,30 @@
     </footer>
 
     <script>
+    // Products Data
     const products = [
-        { id: 1, name: "Litti Chokha (2pcs)", price: 40, img: "🍛", category: "Food" },
-        { id: 2, name: "Samosa (2pcs)", price: 20, img: "🥟", category: "Food" },
-        { id: 3, name: "Pakoda (Plate)", price: 30, img: "🍘", category: "Food" },
-        { id: 4, name: "Curd (1L)", price: 20, img: "🥛", category: "Food" },
-        { id: 5, name: "Rice (1kg)", price: 60, img: "🍚", category: "Kirana" },
-        { id: 6, name: "Aata (1kg)", price: 35, img: "🌾", category: "Kirana" },
-        { id: 7, name: "Oil (1L)", price: 140, img: "🛢️", category: "Oil & Masala" },
-        { id: 8, name: "Pulse (1kg)", price: 80, img: "🫘", category: "Kirana" },
-        { id: 9, name: "Masala (100g)", price: 10, img: "🧂", category: "Oil & Masala" },
-        { id: 10, name: "Soyabean (1kg)", price: 90, img: "🫘", category: "Kirana" },
-        { id: 11, name: "Chai (1kg)", price: 120, img: "🍵", category: "Kirana" },
-        { id: 12, name: "Biscuit Packet", price: 10, img: "🍪", category: "Snacks" },
-        { id: 13, name: "Namkeen (250g)", price: 25, img: "🥨", category: "Snacks" }
+        { id: 1, name: "लिट्ठी चोखा (2pcs)", price: 40, img: "🍛", category: "नाश्ता" },
+        { id: 2, name: "समोसा (2pcs)", price: 20, img: "🥟", category: "नाश्ता" },
+        { id: 3, name: "पकौड़ी (Plate)", price: 30, img: "🍘", category: "नाश्ता" },
+        { id: 4, name: "छाछ (1L)", price: 20, img: "🥛", category: "नाश्ता" },
+        { id: 5, name: "चावल (1kg)", price: 60, img: "🍚", category: "किराना सामान" },
+        { id: 6, name: "आटा (1kg)", price: 35, img: "🌾", category: "किराना सामान" },
+        { id: 7, name: "तेल (1L)", price: 140, img: "🛢️", category: "तेल, मसाला" },
+        { id: 8, name: "दाल (1kg)", price: 80, img: "🫘", category: "किराना सामान" },
+        { id: 9, name: "मसाला (100g)", price: 10, img: "🧂", category: "तेल, मसाला" },
+        { id: 10, name: "सोयाबीन (1kg)", price: 90, img: "🫘", category: "किराना सामान" },
+        { id: 11, name: "चाय (1kg)", price: 120, img: "🍵", category: "किराना सामान" },
+        { id: 12, name: "बिस्कुट पैकेट", price: 10, img: "🍪", category: "Snacks" },
+        { id: 13, name: "नमकीन (250g)", price: 25, img: "🥨", category: "Snacks" }
     ];
 
     const productList = document.getElementById("product-list");
     const categoryPills = document.querySelectorAll(".cat-pill");
+    const locationStatus = document.getElementById("location-status");
+    const locationModal = document.getElementById("location-modal");
+    const locationText = document.getElementById("location-text");
 
+    // Render Products
     function renderProducts(filter = "All") {
         productList.innerHTML = "";
 
@@ -464,78 +469,75 @@
             : products.filter(p => p.category === filter);
 
         if (filteredProducts.length === 0) {
-            productList.innerHTML = "<p>No products found.</p>";
+            productList.innerHTML = "<p>कोई प्रोडक्ट नहीं मिला।</p>";
             return;
         }
 
-        filteredProducts.forEach(product => {
+        filteredProducts.forEach((product, index) => {
             const card = document.createElement("div");
             card.className = "product-card";
+            card.style.animationDelay = (index * 0.1) + "s";
             card.innerHTML = `
                 <div class="product-img">${product.img}</div>
                 <div class="product-name">${product.name}</div>
                 <div class="product-price">₹${product.price}</div>
                 <button class="order-btn" onclick="orderNow('${product.name}', ${product.price})">
-                    🛒 Order Now
+                    🛒 ऑर्डर करें
                 </button>
             `;
             productList.appendChild(card);
         });
     }
 
+    // Order Function (WhatsApp)
     function orderNow(name, price) {
         const phoneNumber = "919525499540";
-        const message = `नमस्ते! मुझे ${name} (₹${price}) ऑर्डर करना है!`;
+        const message = `नमस्ते हरी जी! मुझे ${name} (₹${price}) ऑर्डर करना है!\n\nक्या मैं Cash on Delivery (COD) करूँ?`;
         const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
         window.open(url, "_blank");
     }
 
+    // Category Filter
     categoryPills.forEach(pill => {
         pill.addEventListener("click", () => {
             document.querySelector(".cat-pill.active").classList.remove("active");
             pill.classList.add("active");
 
             let categoryText = pill.textContent;
-            if (categoryText.includes("Sabhi")) renderProducts("All");
-            else if (categoryText.includes("Khana")) renderProducts("Food");
-            else if (categoryText.includes("Kirana")) renderProducts("Kirana");
+            if (categoryText.includes("सभी")) renderProducts("All");
+            else if (categoryText.includes("नाश्ता")) renderProducts("नाश्ता");
+            else if (categoryText.includes("किराना")) renderProducts("किराना सामान");
             else if (categoryText.includes("Snacks")) renderProducts("Snacks");
-            else if (categoryText.includes("Oil")) renderProducts("Oil & Masala");
+            else if (categoryText.includes("तेल")) renderProducts("तेल, मसाला");
         });
     });
 
     // Location Detection
-    const locationStatus = document.getElementById("location-status");
-    const locationModal = document.getElementById("location-modal");
-    const locationText = document.getElementById("location-text");
-
     function closeModal() {
         locationModal.style.display = "none";
     }
 
     function getLocation() {
         if (navigator.geolocation) {
+            locationStatus.textContent = "📍 लोकेशन मिल रही है...";
             navigator.geolocation.getCurrentPosition(position => {
                 const lat = position.coords.latitude.toFixed(2);
                 const lon = position.coords.longitude.toFixed(2);
                 const locationString = `Lat: ${lat}, Lon: ${lon}`;
                 locationStatus.textContent = "📍 " + locationString;
-                locationText.textContent = "Aapki location: " + locationString;
+                locationText.textContent = "आपकी लोकेशन: " + locationString;
                 locationModal.style.display = "flex";
             }, () => {
-                locationStatus.textContent = "📍 Location permission denied";
+                locationStatus.textContent = "📍 लोकेशन अनुमति नहीं दी गई";
             });
         } else {
-            locationStatus.textContent = "Geolocation not supported";
+            locationStatus.textContent = "Geolocation supported नहीं है";
         }
     }
 
     // Initial Load
     window.onload = () => {
         renderProducts();
-        getLocation();
     };
-
 </script>
-
 
