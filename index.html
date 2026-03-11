@@ -38,8 +38,8 @@
 
     <div class="payment-info">
         <h3>💳 भुगतान का तरीका</h3>
-        <p><strong>1. Cash on Delivery (COD)</strong> - डिलीवरी पर नकद दें!</p>
-        <p><strong>2. Online Payment</strong> - PhonePe, GPay, Paytm</p>
+        <p><strong>1. UPI Payment</strong> - Google Pay, PhonePe, Paytm</p>
+        <p><strong>2. Cash on Delivery (COD)</strong> - डिलीवरी पर नकद दें!</p>
         <p><strong>3. फोन पर ऑर्डर</strong> - +91 95254 99540</p>
     </div>
 
@@ -75,13 +75,34 @@
             </div>
             
             <div class="order-action-btns">
-                <button class="confirm-btn" onclick="confirmOrder()">
-                    📱 WhatsApp पर ऑर्डर करें
+                <button class="confirm-btn" onclick="showPaymentOptions()">
+                    ✅ भुगतान चुनें
                 </button>
                 <button class="cancel-btn" onclick="closeQuantityModal()">
                     रद्द करें
                 </button>
             </div>
+        </div>
+    </div>
+
+    <!-- Payment Options Modal -->
+    <div class="payment-modal" id="payment-modal">
+        <div class="modal-content">
+            <h3>💳 भुगतान का तरीका चुनें</h3>
+            <p id="payment-product-info" style="font-size: 14px; color: #666;"></p>
+            
+            <div class="payment-options">
+                <button class="payment-option-btn" onclick="confirmOrder('UPI')">
+                    📱 UPI Payment करूँगा/करूँगी
+                </button>
+                <button class="payment-option-btn" onclick="confirmOrder('COD')">
+                    💵 Cash on Delivery (COD)
+                </button>
+            </div>
+            
+            <button class="cancel-btn" onclick="closePaymentModal()" style="margin-top: 15px;">
+                वापस जाएं
+            </button>
         </div>
     </div>
 

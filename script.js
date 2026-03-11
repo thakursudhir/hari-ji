@@ -18,6 +18,7 @@ const products = [
 // Current order state
 let currentProduct = null;
 let currentQuantity = 1;
+let currentLocation = "";
 
 // DOM Elements
 const productList = document.getElementById("product-list");
@@ -26,6 +27,7 @@ const locationStatus = document.getElementById("location-status");
 const locationModal = document.getElementById("location-modal");
 const locationText = document.getElementById("location-text");
 const quantityModal = document.getElementById("quantity-modal");
+const paymentModal = document.getElementById("payment-modal");
 const qtyDisplay = document.getElementById("qty-display");
 const totalDisplay = document.getElementById("total-display");
 
@@ -101,18 +103,72 @@ function closeQuantityModal() {
     currentQuantity = 1;
 }
 
-// Confirm Order - Send to WhatsApp
-function confirmOrder() {
+// Show Payment Options
+function showPaymentOptions() {
+    if (!currentProduct) return;
+    
+    const total = currentProduct.price * currentQuantity;
+    document.getElementById("payment-product-info").textContent = 
+        `${currentProduct.name} x${currentQuantity} = कुल ₹${total}`;
+    
+    quantityModal.style.display = "none";
+    paymentModal.style.display = "flex";
+}
+
+// Close Payment Modal
+function closePaymentModal() {
+    paymentModal.style.display = "none";
+    quantityModal.style.display = "flex";
+}
+
+// Confirm Order - Send to WhatsApp with Location
+function confirmOrder(paymentMethod) {
     if (!currentProduct) return;
     
     const phoneNumber = "919525499540";
     const total = currentProduct.price * currentQuantity;
     const unitText = currentQuantity === 1 ? "" : ` x${currentQuantity}`;
-    const message = `नमस्ते हरी जी! मुझे ${currentProduct.name}${unitText} (कुल ₹${total}) ऑर्डर करना है!\n\nक्या मैं Cash on Delivery (COD) करूँ?`;
+    
+    let orderType = "";
+    
+    if (paymentMethod === "UPI") {
+        orderType = "📱 मैं UPI से payment करूँगा/करूँगी";
+    } else {
+        orderType = "💵 मैं डिलीवरी पर नकद दूँगा/दूँगी";
+    }
+    
+    // Get Google Maps link from coordinates
+    let locationPart = "";
+    if (currentLocation) {
+        const [lat, lon] = currentLocation.split(",");
+        locationPart = `\n📍 मेरी लोकेशन: https://maps.google.com/?q=${lat},${lon}`;
+    } else {
+        locationPart = "\n📍 लोकेशन: उपलब्ध नहीं है";
+    }
+    
+    const message = `नमस्ते हरी जी! 🙏
+
+मैं आपके दुकान से ऑर्डर करना चाहता/चाहती हूँ:
+
+📦 आइटम: ${currentProduct.name}${unitText}
+💰 कुल राशि: ₹${total}
+💳 भुगतान: ${orderType}${locationPart}
+
+कृपया पहले confirm करें:
+1. यह आइटम उपलब्ध है या नहीं?
+2. मुझे कितने समय में मिल जाएगा?
+
+धन्यवाद! 🙏`;
+    
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     
     window.open(url, "_blank");
-    closeQuantityModal();
+    
+    // Close modals
+    paymentModal.style.display = "none";
+    quantityModal.style.display = "none";
+    currentProduct = null;
+    currentQuantity = 1;
 }
 
 // Category Filter
@@ -139,17 +195,23 @@ function getLocation() {
     if (navigator.geolocation) {
         locationStatus.textContent = "📍 लोकेशन मिल रही है...";
         navigator.geolocation.getCurrentPosition(position => {
-            const lat = position.coords.latitude.toFixed(2);
-            const lon = position.coords.longitude.toFixed(2);
+            const lat = position.coords.latitude.toFixed(4);
+            const lon = position.coords.longitude.toFixed(4);
+            
+            // Store location for WhatsApp message
+            currentLocation = `${lat},${lon}`;
+            
             const locationString = `Lat: ${lat}, Lon: ${lon}`;
             locationStatus.textContent = "📍 " + locationString;
             locationText.textContent = "आपकी लोकेशन: " + locationString;
             locationModal.style.display = "flex";
         }, () => {
             locationStatus.textContent = "📍 लोकेशन अनुमति नहीं दी गई";
+            currentLocation = "";
         });
     } else {
         locationStatus.textContent = "Geolocation supported नहीं है";
+        currentLocation = "";
     }
 }
 

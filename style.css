@@ -301,7 +301,7 @@ footer {
 }
 
 /* Modal Styles */
-.location-modal, .quantity-modal {
+.location-modal, .quantity-modal, .payment-modal {
     display: none;
     position: fixed;
     top: 0;
@@ -467,5 +467,32 @@ footer {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Payment Option Buttons */
+.payment-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.payment-option-btn {
+    background: white;
+    color: #333;
+    border: 2px solid var(--zepto-green);
+    padding: 15px;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.payment-option-btn:hover {
+    background: var(--zepto-green);
+    color: white;
+    transform: scale(1.02);
 }
 
