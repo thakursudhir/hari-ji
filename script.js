@@ -19,6 +19,7 @@ const products = [
 let currentProduct = null;
 let currentQuantity = 1;
 let currentLocation = "";
+let currentPaymentMethod = "COD";
 
 // DOM Elements
 const productList = document.getElementById("product-list");
@@ -27,7 +28,6 @@ const locationStatus = document.getElementById("location-status");
 const locationModal = document.getElementById("location-modal");
 const locationText = document.getElementById("location-text");
 const quantityModal = document.getElementById("quantity-modal");
-const paymentModal = document.getElementById("payment-modal");
 const qtyDisplay = document.getElementById("qty-display");
 const totalDisplay = document.getElementById("total-display");
 
@@ -64,10 +64,14 @@ function renderProducts(filter = "All") {
 function openQuantityModal(productId) {
     currentProduct = products.find(p => p.id === productId);
     currentQuantity = 1;
+    currentPaymentMethod = "COD";
     
-    // Update modal content
     document.getElementById("product-name-display").textContent = currentProduct.name;
     document.getElementById("product-price-display").textContent = "कीमत: ₹" + currentProduct.price + " प्रति नग";
+    
+    // Reset payment selection - both blank initially
+    document.getElementById("upi-btn").classList.remove("selected");
+    document.getElementById("cod-btn").classList.remove("selected");
     
     updateQuantityDisplay();
     quantityModal.style.display = "flex";
@@ -96,6 +100,17 @@ function decreaseQty() {
     }
 }
 
+// Select Payment Method
+function selectPayment(method) {
+    currentPaymentMethod = method;
+    
+    // Update visual selection - use lowercase to match HTML IDs
+    const methodLower = method.toLowerCase();
+    document.getElementById("upi-btn").classList.remove("selected");
+    document.getElementById("cod-btn").classList.remove("selected");
+    document.getElementById(methodLower + "-btn").classList.add("selected");
+}
+
 // Close Quantity Modal
 function closeQuantityModal() {
     quantityModal.style.display = "none";
@@ -103,47 +118,20 @@ function closeQuantityModal() {
     currentQuantity = 1;
 }
 
-// Show Payment Options
-function showPaymentOptions() {
-    if (!currentProduct) return;
-    
-    const total = currentProduct.price * currentQuantity;
-    document.getElementById("payment-product-info").textContent = 
-        `${currentProduct.name} x${currentQuantity} = कुल ₹${total}`;
-    
-    quantityModal.style.display = "none";
-    paymentModal.style.display = "flex";
-}
-
-// Close Payment Modal
-function closePaymentModal() {
-    paymentModal.style.display = "none";
-    quantityModal.style.display = "flex";
-}
-
-// Confirm Order - Send to WhatsApp with Location
-function confirmOrder(paymentMethod) {
+// Send Order to WhatsApp
+function sendOrder() {
     if (!currentProduct) return;
     
     const phoneNumber = "919525499540";
     const total = currentProduct.price * currentQuantity;
     const unitText = currentQuantity === 1 ? "" : ` x${currentQuantity}`;
     
-    let orderType = "";
+    let orderType = currentPaymentMethod === "UPI" ? "📱 UPI Payment" : "💵 Cash on Delivery (COD)";
     
-    if (paymentMethod === "UPI") {
-        orderType = "📱 मैं UPI से payment करूँगा/करूँगी";
-    } else {
-        orderType = "💵 मैं डिलीवरी पर नकद दूँगा/दूँगी";
-    }
-    
-    // Get Google Maps link from coordinates
-    let locationPart = "";
+    let locationUrl = "";
     if (currentLocation) {
         const [lat, lon] = currentLocation.split(",");
-        locationPart = `\n📍 मेरी लोकेशन: https://maps.google.com/?q=${lat},${lon}`;
-    } else {
-        locationPart = "\n📍 लोकेशन: उपलब्ध नहीं है";
+        locationUrl = `https://maps.google.com/?q=${lat},${lon}`;
     }
     
     const message = `नमस्ते हरी जी! 🙏
@@ -152,23 +140,17 @@ function confirmOrder(paymentMethod) {
 
 📦 आइटम: ${currentProduct.name}${unitText}
 💰 कुल राशि: ₹${total}
-💳 भुगतान: ${orderType}${locationPart}
+💳 भुगतान: ${orderType}
 
-कृपया पहले confirm करें:
-1. यह आइटम उपलब्ध है या नहीं?
-2. मुझे कितने समय में मिल जाएगा?
+📍 डिलीवरी पता: ${locationUrl}
 
-धन्यवाद! 🙏`;
+कृपया ${currentProduct.name} का ORDER confirm करें! 🙏`;
     
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     
     window.open(url, "_blank");
     
-    // Close modals
-    paymentModal.style.display = "none";
-    quantityModal.style.display = "none";
-    currentProduct = null;
-    currentQuantity = 1;
+    closeQuantityModal();
 }
 
 // Category Filter
@@ -198,7 +180,6 @@ function getLocation() {
             const lat = position.coords.latitude.toFixed(4);
             const lon = position.coords.longitude.toFixed(4);
             
-            // Store location for WhatsApp message
             currentLocation = `${lat},${lon}`;
             
             const locationString = `Lat: ${lat}, Lon: ${lon}`;
@@ -215,9 +196,30 @@ function getLocation() {
     }
 }
 
+// Add event listeners after page loads
+document.addEventListener("DOMContentLoaded", function() {
+    
+    // Send order button - use click only (not touchstart to avoid double firing)
+    document.getElementById("send-order-btn").addEventListener("click", function(e) {
+        e.preventDefault();
+        sendOrder();
+    });
+    
+});
+
 // Initial Load
-window.onload = () => {
+window.onload = function() {
     renderProducts();
-    getLocation();
+    
+    // Show welcome popup for 4 seconds
+    const welcomePopup = document.getElementById("welcome-popup");
+    if (welcomePopup) {
+        setTimeout(() => {
+            welcomePopup.style.display = "none";
+        }, 4000);
+    }
+    
+    // Note: Location is no longer automatically requested on page load
+    // Users can still use location feature if needed by calling getLocation() manually
 };
 

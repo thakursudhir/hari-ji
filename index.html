@@ -13,9 +13,6 @@
             <div class="logo">हरी जी <span> की दुकान</span></div>
         </div>
         <div class="slogan">"घर बैठे मंगाएँ सब कुछ — बस एक क्लिक में!"</div>
-        <div class="location-status" id="location-status">
-            📍 लोकेशन लोड हो रही है...
-        </div>
     </header>
 
     <div class="categories">
@@ -38,12 +35,27 @@
 
     <div class="payment-info">
         <h3>💳 भुगतान का तरीका</h3>
-        <p><strong>1. UPI Payment</strong> - Google Pay, PhonePe, Paytm</p>
+        <p><strong>1. UPI (Online se)</strong></p>
+        <div class="payment-logos">
+            <span class="payment-logo">📱 PhonePe</span>
+            <span class="payment-logo">💙 GPay</span>
+            <span class="payment-logo">🅿️ Paytm</span>
+        </div>
         <p><strong>2. Cash on Delivery (COD)</strong> - डिलीवरी पर नकद दें!</p>
         <p><strong>3. फोन पर ऑर्डर</strong> - +91 95254 99540</p>
     </div>
 
     <a href="tel:+919525499540" class="call-btn">📞</a>
+
+    <!-- Welcome Popup -->
+    <div class="welcome-popup" id="welcome-popup">
+        <div class="welcome-content">
+            <div class="welcome-icon">🍛</div>
+            <h1>हरी जी की दुकान</h1>
+            <p>में आपका स्वागत है! 🙏</p>
+            <p class="welcome-tagline">घर बैठे मंगाएँ सब कुछ — बस एक क्लिक में!</p>
+        </div>
+    </div>
 
     <!-- Location Modal -->
     <div class="location-modal" id="location-modal">
@@ -54,15 +66,16 @@
         </div>
     </div>
 
-    <!-- Quantity Selection Modal -->
+    <!-- Order Modal - All in One -->
     <div class="quantity-modal" id="quantity-modal">
         <div class="modal-content">
             <h3>🛒 कितना चाहिए?</h3>
-            <p id="product-name-display" style="font-size: 16px; font-weight: bold; color: #333;"></p>
+            <p id="product-name-display" style="font-size: 18px; font-weight: bold; color: #333;"></p>
             <p id="product-price-display" style="color: #666;"></p>
             
+            <!-- Quantity -->
             <div class="quantity-selector">
-                <h4>मात्रा चुनें:</h4>
+                <h4>मात्रा:</h4>
                 <div class="quantity-controls">
                     <button class="qty-btn" onclick="decreaseQty()">−</button>
                     <span class="qty-display" id="qty-display">1</span>
@@ -74,34 +87,26 @@
                 <span id="total-display">₹0</span>
             </div>
             
-            <div class="order-action-btns">
-                <button class="confirm-btn" onclick="showPaymentOptions()">
-                    ✅ भुगतान चुनें
-                </button>
-                <button class="cancel-btn" onclick="closeQuantityModal()">
-                    रद्द करें
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Payment Options Modal -->
-    <div class="payment-modal" id="payment-modal">
-        <div class="modal-content">
-            <h3>💳 भुगतान का तरीका चुनें</h3>
-            <p id="payment-product-info" style="font-size: 14px; color: #666;"></p>
-            
-            <div class="payment-options">
-                <button class="payment-option-btn" onclick="confirmOrder('UPI')">
-                    📱 UPI Payment करूँगा/करूँगी
-                </button>
-                <button class="payment-option-btn" onclick="confirmOrder('COD')">
-                    💵 Cash on Delivery (COD)
-                </button>
+            <!-- Payment Selection -->
+            <div class="payment-section">
+                <h4>भुगतान का तरीका:</h4>
+                <div class="payment-buttons">
+                    <button class="payment-btn" id="upi-btn" onclick="selectPayment('UPI')">
+                        📱 UPI
+                    </button>
+                    <button class="payment-btn" id="cod-btn" onclick="selectPayment('COD')">
+                        💵 COD
+                    </button>
+                </div>
             </div>
             
-            <button class="cancel-btn" onclick="closePaymentModal()" style="margin-top: 15px;">
-                वापस जाएं
+            <!-- Order Button -->
+            <button class="confirm-btn" id="send-order-btn">
+                ✅ ऑर्डर भेजें
+            </button>
+            
+            <button class="cancel-btn" onclick="closeQuantityModal()">
+                रद्द करें
             </button>
         </div>
     </div>
