@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — हरी जी की दुकान</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<!-- LOGIN SCREEN -->
+<div id="login-screen">
+    <div class="login-box">
+        <div style="font-size:52px;margin-bottom:8px">🌿</div>
+        <h2>हरी जी — Admin Login</h2>
+        <p style="color:#888;font-size:14px;margin-bottom:24px">दुकानदार का secret area</p>
+        <input type="password" id="admin-pass" placeholder="पासवर्ड डालें..." class="login-input" onkeydown="if(event.key==='Enter')doLogin()">
+        <button class="login-btn" onclick="doLogin()">🔐 Login करें</button>
+        <p class="login-hint">Default password: <strong>hari123</strong></p>
+    </div>
+</div>
+
+<!-- ADMIN PANEL (hidden until login) -->
+<div id="admin-panel" style="display:none">
+
+    <!-- SIDEBAR -->
+    <div class="admin-sidebar">
+        <div class="sidebar-logo">
+            <div style="font-size:28px">🌿</div>
+            <div>
+                <div style="font-weight:800;font-size:16px">हरी जी</div>
+                <div style="font-size:11px;opacity:0.7">Admin Panel</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <a class="nav-item active" onclick="showTab('dashboard')">📊 Dashboard</a>
+            <a class="nav-item" onclick="showTab('products')">📦 Products</a>
+            <a class="nav-item" onclick="showTab('orders')">🛒 Orders</a>
+            <a class="nav-item" onclick="showTab('reviews')">⭐ Reviews</a>
+            <a class="nav-item" onclick="showTab('settings')">⚙️ Settings</a>
+        </nav>
+        <button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="admin-main">
+
+        <!-- TOP BAR -->
+        <div class="admin-topbar">
+            <div class="topbar-title" id="topbar-title">📊 Dashboard</div>
+            <div class="topbar-right">
+                <span class="shop-status" id="shop-status-badge" onclick="toggleShopStatus()">🟢 दुकान खुली है</span>
+                <a href="index.html" target="_blank" class="view-site-btn">🌐 Site देखें</a>
+            </div>
+        </div>
+
+        <!-- ===== DASHBOARD TAB ===== -->
+        <div class="tab-content active" id="tab-dashboard">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-num" id="stat-products">0</div>
+                    <div class="stat-label">कुल Products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⭐</div>
+                    <div class="stat-num" id="stat-reviews">0</div>
+                    <div class="stat-label">Reviews</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🕐</div>
+                    <div class="stat-num" id="stat-time">7AM-9PM</div>
+                    <div class="stat-label">Delivery Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📞</div>
+                    <div class="stat-num" style="font-size:14px">+91 95254 99540</div>
+                    <div class="stat-label">WhatsApp</div>
+                </div>
+            </div>
+
+            <div class="dashboard-info">
+                <h3>🚀 Google Sheets Setup करें</h3>
+                <div class="setup-steps">
+                    <div class="step">
+                        <div class="step-num">1</div>
+                        <div>
+                            <strong>Google Sheet बनाएं</strong><br>
+                            <a href="https://sheets.google.com" target="_blank" class="link-btn">sheets.google.com खोलें →</a>
+                            <p class="step-desc">नई sheet बनाएं। पहली row में: <code>id, name, price, category, unit, emoji, badge, available</code></p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">2</div>
+                        <div>
+                            <strong>Sheet को Public करें</strong><br>
+                            <p class="step-desc">File → Share → Anyone with link → Viewer → Done</p>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">3</div>
+                        <div>
+                            <strong>Sheet ID यहाँ डालें</strong><br>
+                            <p class="step-desc">URL से ID copy करें: docs.google.com/spreadsheets/d/<strong>SHEET_ID_HERE</strong>/edit</p>
+                            <div style="display:flex;gap:8px;margin-top:8px">
+                                <input type="text" id="sheet-id-input" placeholder="Sheet ID paste करें..." class="setting-input" style="flex:1">
+                                <button class="save-btn" onclick="saveSheetId()">💾 Save</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">4</div>
+                        <div>
+                            <strong>Test करें</strong><br>
+                            <button class="test-btn" onclick="testSheetConnection()">🔄 Connection Test करें</button>
+                            <span id="test-result" style="margin-left:10px;font-size:13px"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== PRODUCTS TAB ===== -->
+        <div class="tab-content" id="tab-products">
+            <div class="tab-header">
+                <h2>📦 Products Management</h2>
+                <button class="add-btn" onclick="openAddProduct()">+ नया Product जोड़ें</button>
+            </div>
+
+            <!-- Add/Edit Product Form -->
+            <div class="product-form-card" id="product-form" style="display:none">
+                <h3 id="form-title">➕ नया Product जोड़ें</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Product का नाम (हिंदी) *</label>
+                        <input type="text" id="f-name" placeholder="जैसे: चावल, दाल, तेल..." class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>कीमत (₹) *</label>
+                        <input type="number" id="f-price" placeholder="जैसे: 60" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="f-category" class="form-input">
+                            <option value="">-- चुनें --</option>
+                            <option>नाश्ता</option>
+                            <option>किराना सामान</option>
+                            <option>स्नैक्स</option>
+                            <option>तेल, मसाला</option>
+                            <option>साबुन, देखभाल</option>
+                            <option>दवाई</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>मात्रा / Unit</label>
+                        <input type="text" id="f-unit" placeholder="जैसे: 1kg, 250g, 2pcs..." class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label>Emoji (product icon)</label>
+                        <input type="text" id="f-emoji" placeholder="जैसे: 🍚 🫘 🛢️" class="form-input" style="font-size:22px">
+                    </div>
+                    <div class="form-group">
+                        <label>Badge (optional)</label>
+                        <input type="text" id="f-badge" placeholder="जैसे: बेस्ट, नया, ऑफर" class="form-input">
+                    </div>
+                </div>
+
+                <!-- Image Upload -->
+                <div class="form-group" style="margin-top:12px">
+                    <label>📸 Product की फोटो (optional)</label>
+                    <div class="image-upload-area" id="image-upload-area" onclick="document.getElementById('f-image').click()">
+                        <div id="upload-placeholder">
+                            <div style="font-size:36px">📷</div>
+                            <p>फोटो चुनें या यहाँ खींचें</p>
+                            <p style="font-size:12px;color:#aaa">JPG, PNG — Max 2MB</p>
+                        </div>
+                        <img id="image-preview" style="display:none;max-width:100%;max-height:180px;border-radius:8px">
+                    </div>
+                    <input type="file" id="f-image" accept="image/*" style="display:none" onchange="previewImage(event)">
+                </div>
+
+                <div style="display:flex;align-items:center;gap:12px;margin-top:10px">
+                    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:600">
+                        <input type="checkbox" id="f-available" checked style="width:18px;height:18px">
+                        Product उपलब्ध है (Available)
+                    </label>
+                </div>
+
+                <div class="form-actions">
+                    <button class="save-btn" onclick="saveProduct()">💾 Save करें</button>
+                    <button class="cancel-form-btn" onclick="closeProductForm()">रद्द करें</button>
+                </div>
+            </div>
+
+            <!-- Products List -->
+            <div class="products-admin-grid" id="products-admin-list">
+                <div style="text-align:center;padding:40px;color:#888">
+                    <div class="spinner"></div>
+                    <p style="margin-top:10px">Products लोड हो रहे हैं...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ORDERS TAB ===== -->
+        <div class="tab-content" id="tab-orders">
+            <div class="tab-header">
+                <h2>🛒 Orders</h2>
+                <a href="https://wa.me/919525499540" target="_blank" class="add-btn">📲 WhatsApp खोलें</a>
+            </div>
+            <div class="orders-info">
+                <div class="info-card">
+                    <div style="font-size:40px">📲</div>
+                    <h3>ऑर्डर WhatsApp पर आते हैं</h3>
+                    <p>जब कोई customer ऑर्डर करता है, तो automatically WhatsApp message आता है।</p>
+                    <p>Message में होगा: <strong>customer का नाम, पता, सामान की list, कुल रकम, payment method और location.</strong></p>
+                    <a href="https://wa.me/919525499540" target="_blank" class="login-btn" style="display:inline-block;margin-top:16px;text-decoration:none">📱 WhatsApp खोलें</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== REVIEWS TAB ===== -->
+        <div class="tab-content" id="tab-reviews">
+            <div class="tab-header">
+                <h2>⭐ Customer Reviews</h2>
+            </div>
+            <div id="admin-reviews-list">
+                <div style="text-align:center;padding:40px;color:#888">Reviews लोड हो रहे हैं...</div>
+            </div>
+        </div>
+
+        <!-- ===== SETTINGS TAB ===== -->
+        <div class="tab-content" id="tab-settings">
+            <div class="tab-header"><h2>⚙️ Settings</h2></div>
+            <div class="settings-grid">
+
+                <div class="setting-card">
+                    <h3>🔐 Admin Password बदलें</h3>
+                    <input type="password" id="new-pass" placeholder="नया password..." class="setting-input">
+                    <input type="password" id="confirm-pass" placeholder="दोबारा डालें..." class="setting-input" style="margin-top:8px">
+                    <button class="save-btn" style="margin-top:10px" onclick="changePassword()">💾 Password बदलें</button>
+                </div>
+
+                <div class="setting-card">
+                    <h3>📞 WhatsApp Number</h3>
+                    <input type="text" id="wa-number" class="setting-input" placeholder="91XXXXXXXXXX">
+                    <button class="save-btn" style="margin-top:10px" onclick="saveWaNumber()">💾 Save</button>
+                </div>
+
+                <div class="setting-card">
+                    <h3>🕐 Delivery Timing</h3>
+                    <div style="display:flex;gap:10px;align-items:center">
+                        <input type="time" id="open-time" value="07:00" class="setting-input" style="flex:1">
+                        <span>से</span>
+                        <input type="time" id="close-time" value="21:00" class="setting-input" style="flex:1">
+                    </div>
+                    <button class="save-btn" style="margin-top:10px" onclick="saveTiming()">💾 Save</button>
+                </div>
+
+                <div class="setting-card">
+                    <h3>🎉 Offer Strip Message</h3>
+                    <input type="text" id="offer-text" class="setting-input" placeholder="ऑफर message लिखें...">
+                    <button class="save-btn" style="margin-top:10px" onclick="saveOfferText()">💾 Save</button>
+                </div>
+
+                <div class="setting-card">
+                    <h3>📊 Google Sheets ID</h3>
+                    <input type="text" id="sheet-id-setting" class="setting-input" placeholder="Sheet ID...">
+                    <button class="save-btn" style="margin-top:10px" onclick="saveSheetIdFromSettings()">💾 Save</button>
+                    <p style="font-size:12px;color:#888;margin-top:6px">Sheet ID बदलने पर page reload होगा</p>
+                </div>
+
+                <div class="setting-card danger-card">
+                    <h3>🗑️ सभी Reviews हटाएं</h3>
+                    <p style="color:#888;font-size:13px">यह सभी customer reviews delete कर देगा।</p>
+                    <button class="danger-btn" onclick="clearReviews()">⚠️ सभी Reviews हटाएं</button>
+                </div>
+            </div>
+        </div>
+
+    </div><!-- end admin-main -->
+</div><!-- end admin-panel -->
+
+<!-- Add/Edit Product success toast -->
+<div id="admin-toast" class="admin-toast" style="display:none"></div>
+
+<script src="config.js"></script>
+<script src="admin.js"></script>
+</body>
+</html>

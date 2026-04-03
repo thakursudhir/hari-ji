@@ -10,8 +10,8 @@
 </head>
 <body>
 
-<!-- TOP OFFER STRIP -->
-<div class="offer-strip">
+<!-- OFFER STRIP -->
+<div class="offer-strip" id="offer-strip">
     🎉 पहले ऑर्डर पर 10% छूट! कोड: <strong>HARI10</strong> &nbsp;|&nbsp; 🚚 ₹199 से ऊपर Free Delivery!
 </div>
 
@@ -22,12 +22,12 @@
             <div class="logo-icon">🌿</div>
             <div class="logo-text">
                 <span class="logo-main">हरी जी</span>
-                <span class="logo-sub">की दुकान</span>
+                <span class="logo-sub">की दुकान — बिहार</span>
             </div>
         </div>
         <div class="header-right">
             <div class="location-badge" id="location-status" onclick="getLocation()">
-                <span class="loc-icon">📍</span>
+                <span>📍</span>
                 <span id="loc-text">लोकेशन लें</span>
             </div>
             <div class="cart-icon" onclick="openCart()">
@@ -36,118 +36,139 @@
         </div>
     </div>
     <div class="slogan">"घर बैठे मंगाएँ — बस एक क्लिक में!" 🙏</div>
-
-    <!-- Search Bar -->
     <div class="search-bar">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" placeholder="क्या ढूंढ रहे हैं? चावल, दाल, साबुन..." oninput="searchProducts()">
+        <span>🔍</span>
+        <input type="text" id="search-input" placeholder="चावल, दाल, साबुन... क्या चाहिए?" oninput="searchProducts()">
     </div>
 </header>
 
 <!-- CATEGORIES -->
-<div class="categories" id="categories">
+<div class="categories" id="cat-bar">
     <div class="cat-pill active" onclick="filterCat(this,'All')">🛍️ सभी</div>
-    <div class="cat-pill" onclick="filterCat(this,'नाश्ता')">🍛 नाश्ता</div>
-    <div class="cat-pill" onclick="filterCat(this,'किराना सामान')">🌾 किराना</div>
-    <div class="cat-pill" onclick="filterCat(this,'स्नैक्स')">🍪 स्नैक्स</div>
-    <div class="cat-pill" onclick="filterCat(this,'तेल, मसाला')">🫙 तेल-मसाला</div>
-    <div class="cat-pill" onclick="filterCat(this,'साबुन, देखभाल')">🧼 साबुन</div>
-    <div class="cat-pill" onclick="filterCat(this,'दवाई')">💊 दवाई</div>
 </div>
 
-<!-- BANNER -->
+<!-- BANNERS -->
 <div class="banner-area">
     <div class="banner-card banner-green">
-        <div class="banner-text">
-            <div class="banner-title">🚚 30 मिनट डिलीवरी</div>
-            <div class="banner-sub">सुबह 7 से रात 9 बजे तक</div>
-        </div>
-        <div class="banner-emoji">⚡</div>
+        <div><div class="banner-title">🚚 30 मिनट डिलीवरी</div><div class="banner-sub">सुबह 7 से रात 9 बजे तक</div></div>
+        <span style="font-size:34px">⚡</span>
     </div>
     <div class="banner-card banner-orange">
-        <div class="banner-text">
-            <div class="banner-title">💵 Cash on Delivery</div>
-            <div class="banner-sub">घर पर पैसे दें — कोई चिंता नहीं</div>
-        </div>
-        <div class="banner-emoji">🏠</div>
+        <div><div class="banner-title">💵 Cash on Delivery</div><div class="banner-sub">घर पर पैसे दें — कोई चिंता नहीं</div></div>
+        <span style="font-size:34px">🏠</span>
     </div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- MAIN -->
 <div class="container">
-
-    <!-- Special Offer Section -->
     <div class="section-header">
         <span class="section-title">🔥 आज का स्पेशल</span>
-        <span class="section-badge">ताज़ा माल</span>
+        <span class="section-badge" id="product-count-badge">लोड हो रहा है...</span>
     </div>
-
     <div class="product-grid" id="product-list">
-        <div class="loading-wrap">
+        <div class="loading-wrap" style="grid-column:1/-1;text-align:center;padding:40px;">
             <div class="spinner"></div>
-            <p>प्रोडक्ट लोड हो रहे हैं...</p>
+            <p style="margin-top:10px;color:#888">प्रोडक्ट लोड हो रहे हैं...</p>
         </div>
     </div>
-
-    <!-- Empty state -->
-    <div class="empty-state" id="empty-state" style="display:none;">
-        <div class="empty-emoji">🔍</div>
+    <div class="empty-state" id="empty-state" style="display:none">
+        <div style="font-size:52px">🔍</div>
         <p>कोई प्रोडक्ट नहीं मिला</p>
         <button onclick="filterCat(document.querySelector('.cat-pill'),'All')">सभी देखें</button>
     </div>
 </div>
 
-<!-- PAYMENT INFO SECTION -->
+<!-- DELIVERY MAP -->
+<div class="map-section">
+    <h3 class="map-title">🗺️ डिलीवरी एरिया</h3>
+    <div class="map-wrap">
+        <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14417.123456789!2d84.9!3d25.6!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM2JzAwLjAiTiA4NMKwNTQnMDAuMCJF!5e0!3m2!1shi!2sin!4v1234567890"
+            width="100%" height="220" style="border:0;border-radius:12px" allowfullscreen loading="lazy">
+        </iframe>
+    </div>
+    <div class="delivery-zones">
+        <div class="zone-tag">📍 मुख्य बाज़ार</div>
+        <div class="zone-tag">📍 वार्ड 1-5</div>
+        <div class="zone-tag">📍 आसपास के गाँव</div>
+        <div class="zone-tag">📍 3km रेडियस</div>
+    </div>
+</div>
+
+<!-- REVIEWS SECTION -->
+<div class="reviews-section">
+    <div class="reviews-header">
+        <h3>⭐ ग्राहकों की राय</h3>
+        <button class="add-review-btn" onclick="openModal('review-modal')">+ राय दें</button>
+    </div>
+    <div class="reviews-list" id="reviews-list">
+        <!-- loaded dynamically -->
+    </div>
+</div>
+
+<!-- PAYMENT INFO -->
 <div class="payment-section">
     <h3 class="pay-title">💳 भुगतान के तरीके</h3>
     <div class="pay-grid">
-        <div class="pay-card">
-            <div class="pay-icon">📱</div>
-            <div class="pay-name">UPI</div>
-            <div class="pay-desc">Google Pay, PhonePe, Paytm</div>
-        </div>
-        <div class="pay-card">
-            <div class="pay-icon">💵</div>
-            <div class="pay-name">Cash on Delivery</div>
-            <div class="pay-desc">डिलीवरी पर नकद</div>
-        </div>
-        <div class="pay-card">
-            <div class="pay-icon">📞</div>
-            <div class="pay-name">फोन ऑर्डर</div>
-            <div class="pay-desc">+91 95254 99540</div>
-        </div>
+        <div class="pay-card"><div class="pay-icon">💵</div><div class="pay-name">Cash on Delivery</div><div class="pay-desc">डिलीवरी पर नकद</div></div>
+        <div class="pay-card"><div class="pay-icon">📱</div><div class="pay-name">UPI / GPay</div><div class="pay-desc">Google Pay, PhonePe</div></div>
+        <div class="pay-card"><div class="pay-icon">🅿️</div><div class="pay-name">Paytm</div><div class="pay-desc">Paytm Wallet</div></div>
     </div>
 </div>
 
-<!-- ABOUT SECTION -->
 <div class="about-section">
     <div class="about-inner">
-        <div class="about-emoji">🌿</div>
-        <div>
-            <strong>हरी जी की दुकान</strong> — आपके गाँव की अपनी दुकान।<br>
-            ताज़ा सामान, सही दाम, और घर तक डिलीवरी। 🙏
-        </div>
+        <div style="font-size:36px">🌿</div>
+        <div><strong>हरी जी की दुकान</strong> — आपके गाँव की अपनी दुकान।<br>ताज़ा सामान, सही दाम, घर तक डिलीवरी। 🙏</div>
     </div>
 </div>
 
-<!-- FIXED BOTTOM: CART BAR (shows when cart has items) -->
-<div class="cart-bar" id="cart-bar" style="display:none;" onclick="openCart()">
+<!-- CART BAR -->
+<div class="cart-bar" id="cart-bar" style="display:none" onclick="openCart()">
     <span>🛒 <span id="cart-bar-count">0</span> आइटम</span>
-    <span>कुल: ₹<span id="cart-bar-total">0</span></span>
+    <span>₹<span id="cart-bar-total">0</span></span>
     <span class="cart-bar-btn">ऑर्डर करें →</span>
 </div>
 
-<!-- FLOATING CALL BUTTON -->
-<a href="tel:+919525499540" class="call-btn" title="फोन करें">📞</a>
+<!-- CALL BUTTON -->
+<a href="tel:+919525499540" class="call-btn">📞</a>
 
-<!-- ===================== MODALS ===================== -->
+<!-- ========== MODALS ========== -->
 
 <!-- Location Modal -->
 <div class="modal-overlay" id="location-modal">
     <div class="modal-box">
         <div class="modal-header">📍 आपकी लोकेशन</div>
-        <p id="location-text">लोकेशन मिल रही है...</p>
+        <p id="location-text" style="color:#555;text-align:center;margin-bottom:16px"></p>
         <button class="btn-primary" onclick="closeModal('location-modal')">ठीक है ✓</button>
+    </div>
+</div>
+
+<!-- Quantity Modal -->
+<div class="modal-overlay" id="quantity-modal">
+    <div class="modal-box">
+        <div class="modal-header-row">
+            <span>🛒 कार्ट में जोड़ें</span>
+            <span class="modal-close" onclick="closeModal('quantity-modal')">✕</span>
+        </div>
+        <div class="product-modal-info">
+            <div class="product-modal-img" id="modal-img"></div>
+            <div>
+                <div class="product-modal-name" id="product-name-display"></div>
+                <div class="product-modal-price" id="product-price-display"></div>
+            </div>
+        </div>
+        <div class="qty-row">
+            <span style="font-size:15px;font-weight:700">मात्रा:</span>
+            <div class="quantity-controls">
+                <button class="qty-btn" onclick="decreaseQty()">−</button>
+                <span class="qty-display" id="qty-display">1</span>
+                <button class="qty-btn" onclick="increaseQty()">+</button>
+            </div>
+        </div>
+        <div class="total-price-box">कुल: <span id="total-display">₹0</span></div>
+        <button class="btn-primary" onclick="addToCart()">🛒 कार्ट में जोड़ें</button>
+        <button class="btn-secondary" onclick="closeModal('quantity-modal')">रद्द करें</button>
     </div>
 </div>
 
@@ -159,14 +180,11 @@
             <span class="modal-close" onclick="closeModal('cart-modal')">✕</span>
         </div>
         <div id="cart-items-list"></div>
-        <div class="cart-empty" id="cart-empty-msg">
-            <div style="font-size:48px">🛒</div>
-            <p>कार्ट खाली है — कुछ जोड़ें!</p>
-        </div>
-        <div class="cart-summary" id="cart-summary" style="display:none;">
+        <div class="cart-empty" id="cart-empty-msg"><div style="font-size:48px">🛒</div><p>कार्ट खाली है!</p></div>
+        <div class="cart-summary" id="cart-summary" style="display:none">
             <div class="cart-total-row">
                 <span>कुल राशि:</span>
-                <span class="cart-total-amount">₹<span id="cart-total">0</span></span>
+                <span style="color:var(--green);font-size:20px;font-weight:800">₹<span id="cart-total">0</span></span>
             </div>
             <button class="btn-primary" onclick="proceedToCheckout()">✅ ऑर्डर करें</button>
             <button class="btn-secondary" onclick="closeModal('cart-modal')">और देखें</button>
@@ -174,113 +192,89 @@
     </div>
 </div>
 
-<!-- Quantity Modal (Add to Cart) -->
-<div class="modal-overlay" id="quantity-modal">
-    <div class="modal-box">
+<!-- Payment / Checkout Modal -->
+<div class="modal-overlay" id="payment-modal">
+    <div class="modal-box modal-large">
         <div class="modal-header-row">
-            <span>🛒 कार्ट में जोड़ें</span>
-            <span class="modal-close" onclick="closeModal('quantity-modal')">✕</span>
+            <span>💳 ऑर्डर करें</span>
+            <span class="modal-close" onclick="closeModal('payment-modal')">✕</span>
         </div>
-        <div class="product-modal-info">
-            <div class="product-modal-img" id="modal-img">🛍️</div>
-            <div>
-                <div class="product-modal-name" id="product-name-display"></div>
-                <div class="product-modal-price" id="product-price-display"></div>
-            </div>
+        <label class="field-label">🏠 डिलीवरी का पता *</label>
+        <textarea id="delivery-address" placeholder="पूरा पता लिखें... जैसे: मकान नं. 5, मेन रोड, गाँव का नाम" rows="3"></textarea>
+
+        <label class="field-label" style="margin-top:12px">📦 ऑर्डर सारांश</label>
+        <div id="checkout-summary"></div>
+
+        <label class="field-label" style="margin-top:12px">💳 भुगतान का तरीका</label>
+        <div class="payment-options">
+            <label class="pay-option">
+                <input type="radio" name="payment" value="COD" checked>
+                <span class="pay-opt-icon">💵</span>
+                <div><strong>Cash on Delivery</strong><div class="pay-opt-sub">डिलीवरी पर नकद — सबसे आसान!</div></div>
+                <span class="pay-badge">सबसे लोकप्रिय</span>
+            </label>
+            <label class="pay-option">
+                <input type="radio" name="payment" value="UPI">
+                <span class="pay-opt-icon">📱</span>
+                <div><strong>UPI Payment</strong><div class="pay-opt-sub">Google Pay, PhonePe</div></div>
+            </label>
+            <label class="pay-option">
+                <input type="radio" name="payment" value="Paytm">
+                <span class="pay-opt-icon">🅿️</span>
+                <div><strong>Paytm</strong><div class="pay-opt-sub">Paytm Wallet से भुगतान</div></div>
+            </label>
         </div>
-        <div class="qty-row">
-            <span>मात्रा:</span>
-            <div class="quantity-controls">
-                <button class="qty-btn" onclick="decreaseQty()">−</button>
-                <span class="qty-display" id="qty-display">1</span>
-                <button class="qty-btn" onclick="increaseQty()">+</button>
-            </div>
-        </div>
-        <div class="total-price-box">
-            कुल: <span id="total-display">₹0</span>
-        </div>
-        <button class="btn-primary" onclick="addToCart()">🛒 कार्ट में जोड़ें</button>
-        <button class="btn-secondary" onclick="closeModal('quantity-modal')">रद्द करें</button>
+        <button class="btn-primary btn-whatsapp" onclick="confirmOrder()">📲 WhatsApp पर ऑर्डर भेजें</button>
+        <button class="btn-secondary" onclick="closeModal('payment-modal')">वापस जाएं</button>
     </div>
 </div>
 
-<!-- Checkout / Payment Modal -->
-<div class="modal-overlay" id="payment-modal">
+<!-- Review Modal -->
+<div class="modal-overlay" id="review-modal">
     <div class="modal-box">
         <div class="modal-header-row">
-            <span>💳 भुगतान चुनें</span>
-            <span class="modal-close" onclick="closeModal('payment-modal')">✕</span>
+            <span>⭐ अपनी राय दें</span>
+            <span class="modal-close" onclick="closeModal('review-modal')">✕</span>
+        </div>
+        <label class="field-label">आपका नाम</label>
+        <input type="text" id="review-name" placeholder="जैसे: रामजी, सुनीता देवी..." class="text-input">
+
+        <label class="field-label" style="margin-top:12px">रेटिंग दें</label>
+        <div class="star-selector" id="star-selector">
+            <span class="star" data-val="1" onclick="setRating(1)">★</span>
+            <span class="star" data-val="2" onclick="setRating(2)">★</span>
+            <span class="star" data-val="3" onclick="setRating(3)">★</span>
+            <span class="star" data-val="4" onclick="setRating(4)">★</span>
+            <span class="star" data-val="5" onclick="setRating(5)">★</span>
         </div>
 
-        <!-- Address Input -->
-        <div class="address-section">
-            <label class="field-label">🏠 डिलीवरी का पता *</label>
-            <textarea id="delivery-address" placeholder="अपना पूरा पता लिखें... जैसे: मकान नं. 5, मेन रोड, वार्ड 3, गाँव का नाम" rows="3"></textarea>
-        </div>
+        <label class="field-label" style="margin-top:12px">आपकी राय</label>
+        <textarea id="review-text" placeholder="सामान कैसा था? डिलीवरी कैसी रही?..." rows="3"></textarea>
 
-        <div class="field-label">📦 ऑर्डर सारांश</div>
-        <div id="checkout-summary"></div>
-
-        <div class="field-label" style="margin-top:15px;">💳 भुगतान का तरीका</div>
-
-        <div class="payment-options">
-            <label class="pay-option" id="opt-cod">
-                <input type="radio" name="payment" value="COD" checked>
-                <span class="pay-opt-icon">💵</span>
-                <div>
-                    <strong>Cash on Delivery</strong>
-                    <div class="pay-opt-sub">डिलीवरी पर नकद दें — सबसे आसान!</div>
-                </div>
-                <span class="pay-badge">सबसे लोकप्रिय</span>
-            </label>
-
-            <label class="pay-option" id="opt-upi">
-                <input type="radio" name="payment" value="UPI">
-                <span class="pay-opt-icon">📱</span>
-                <div>
-                    <strong>UPI Payment</strong>
-                    <div class="pay-opt-sub">Google Pay, PhonePe, Paytm</div>
-                </div>
-            </label>
-
-            <label class="pay-option" id="opt-paytm">
-                <input type="radio" name="payment" value="Paytm">
-                <span class="pay-opt-icon">🅿️</span>
-                <div>
-                    <strong>Paytm Wallet</strong>
-                    <div class="pay-opt-sub">Paytm से सीधे भुगतान</div>
-                </div>
-            </label>
-        </div>
-
-        <button class="btn-primary btn-whatsapp" onclick="confirmOrder()">
-            📲 WhatsApp पर ऑर्डर भेजें
-        </button>
-        <button class="btn-secondary" onclick="closeModal('payment-modal')">वापस जाएं</button>
+        <button class="btn-primary" style="margin-top:14px" onclick="submitReview()">✅ राय भेजें</button>
+        <button class="btn-secondary" onclick="closeModal('review-modal')">रद्द करें</button>
     </div>
 </div>
 
 <!-- Success Modal -->
 <div class="modal-overlay" id="success-modal">
-    <div class="modal-box" style="text-align:center;">
-        <div style="font-size:64px; margin-bottom:10px;">🎉</div>
-        <h3 style="color:#2E7D32; margin:0 0 10px;">ऑर्डर भेज दिया गया!</h3>
-        <p style="color:#555;">हरी जी जल्द ही आपसे संपर्क करेंगे।<br>30 मिनट में डिलीवरी होगी! 🚚</p>
-        <button class="btn-primary" onclick="closeModal('success-modal')">धन्यवाद 🙏</button>
+    <div class="modal-box" style="text-align:center">
+        <div style="font-size:64px;margin-bottom:8px">🎉</div>
+        <h3 style="color:#1B8A3C;margin:0 0 10px">ऑर्डर भेज दिया गया!</h3>
+        <p style="color:#555">हरी जी जल्द ही आपसे संपर्क करेंगे।<br>30 मिनट में डिलीवरी होगी! 🚚</p>
+        <button class="btn-primary" style="margin-top:16px" onclick="closeModal('success-modal')">धन्यवाद 🙏</button>
     </div>
 </div>
 
 <footer>
     <div class="footer-inner">
         <div class="footer-logo">🌿 हरी जी की दुकान</div>
-        <p>© 2026-> बदरी नारायण | नौवाचक हाट | सुबह 7 से रात 9 बजे तक</p>
+        <p>© 2026 | बिहार | सुबह 7 से रात 9 बजे तक</p>
         <p>📞 +91 95254 99540 | 🚚 30 मिनट डिलीवरी</p>
-        <div class="footer-links">
-            <span>Made by Sudhir Thakur with❤️ for village Bihar</span>
-        </div>
     </div>
 </footer>
 
+<script src="config.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
