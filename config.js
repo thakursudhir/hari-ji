@@ -12,7 +12,7 @@ const SHOP_CONFIG = {
 
     // Google Sheets ID (from spreadsheet URL)
     // URL example: https://docs.google.com/spreadsheets/d/SHEET_ID_HERE/edit
-    sheetId:     localStorage.getItem('hari_sheet_id') || "",
+    sheetId: "",
 
     // Admin password (change via Settings tab in admin panel)
     adminPass:   localStorage.getItem('hari_admin_pass') || "hari123",
