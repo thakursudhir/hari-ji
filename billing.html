@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>हरी जी — Billing Software</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ROOT & RESET
+============================================================ */
+:root {
+  --g1:#0a3d1f; --g2:#1B8A3C; --g3:#27AE60; --g4:#2ECC71;
+  --yellow:#FFD600; --orange:#FF6B00; --red:#e53935; --blue:#1565C0;
+  --bg:#0d1f14; --card:#122a1a; --card2:#183622; --border:#1e4a28;
+  --text:#e8f5e9; --muted:#7aad8a; --white:#fff;
+  --font:'Baloo 2','Noto Sans Devanagari',sans-serif;
+  --shadow:0 8px 32px rgba(0,0,0,0.4);
+  --radius:16px; --radius-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:var(--card)}
+::-webkit-scrollbar-thumb{background:var(--g2);border-radius:3px}
+
+/* ============================================================
+   LOGIN PAGE
+============================================================ */
+#login-page {
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(ellipse at 20% 50%,#0a3d1f 0%,#0d1f14 60%),
+             radial-gradient(ellipse at 80% 20%,#1B8A3C22 0%,transparent 50%);
+  position:relative;overflow:hidden;
+}
+.login-bg-circles {
+  position:absolute;inset:0;pointer-events:none;
+}
+.lbc {
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,#1B8A3C18,transparent 70%);
+  animation:floatCircle 8s ease-in-out infinite;
+}
+.lbc:nth-child(1){width:500px;height:500px;top:-100px;left:-100px;animation-delay:0s}
+.lbc:nth-child(2){width:300px;height:300px;bottom:-50px;right:-50px;animation-delay:3s}
+.lbc:nth-child(3){width:200px;height:200px;top:50%;left:60%;animation-delay:6s}
+@keyframes floatCircle{0%,100%{transform:scale(1) rotate(0deg)}50%{transform:scale(1.1) rotate(10deg)}}
+
+.login-box {
+  background:linear-gradient(145deg,var(--card),var(--card2));
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:48px 40px;
+  width:90%;max-width:420px;
+  box-shadow:0 32px 80px rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.05);
+  position:relative;z-index:1;
+  animation:loginAppear 0.6s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes loginAppear{from{opacity:0;transform:translateY(40px) scale(0.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+.login-logo {
+  text-align:center;margin-bottom:32px;
+}
+.login-logo-icon {
+  width:80px;height:80px;
+  background:linear-gradient(135deg,var(--g2),var(--g4));
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:36px;margin:0 auto 14px;
+  box-shadow:0 8px 32px rgba(27,138,60,0.4);
+  animation:pulse 3s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 8px 32px rgba(27,138,60,0.4)}50%{box-shadow:0 8px 48px rgba(27,138,60,0.7)}}
+.login-logo h1{font-size:26px;font-weight:900;color:var(--yellow)}
+.login-logo p{font-size:13px;color:var(--muted);margin-top:4px}
+
+.login-tabs {
+  display:flex;background:var(--bg);border-radius:12px;padding:4px;margin-bottom:24px;gap:4px;
+}
+.login-tab {
+  flex:1;padding:10px;border-radius:8px;border:none;
+  font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;
+  background:transparent;color:var(--muted);transition:all 0.3s;
+}
+.login-tab.active{background:linear-gradient(135deg,var(--g2),var(--g3));color:white;box-shadow:0 4px 15px rgba(27,138,60,0.3)}
+
+.login-form{display:flex;flex-direction:column;gap:14px}
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-field label{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.form-field input,.form-field select{
+  background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  padding:13px 16px;font-family:var(--font);font-size:15px;color:var(--text);outline:none;
+  transition:border-color 0.2s,box-shadow 0.2s;
+}
+.form-field input:focus,.form-field select:focus{
+  border-color:var(--g3);box-shadow:0 0 0 3px rgba(39,174,96,0.15);
+}
+.form-field select option{background:var(--card)}
+
+.login-btn {
+  background:linear-gradient(135deg,var(--g2),var(--g4));
+  color:white;border:none;padding:15px;border-radius:12px;
+  font-family:var(--font);font-size:16px;font-weight:800;cursor:pointer;
+  margin-top:6px;transition:all 0.3s;position:relative;overflow:hidden;
+}
+.login-btn::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);opacity:0;transition:opacity 0.3s}
+.login-btn:hover::after{opacity:1}
+.login-btn:active{transform:scale(0.98)}
+
+.login-hint{text-align:center;font-size:12px;color:var(--muted);margin-top:14px}
+.login-hint strong{color:var(--yellow)}
+
+/* ============================================================
+   MAIN APP
+============================================================ */
+#app{display:none;min-height:100vh;flex-direction:column}
+
+/* TOP BAR */
+.topbar {
+  background:linear-gradient(90deg,var(--g1),var(--card2));
+  border-bottom:1px solid var(--border);
+  padding:12px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.topbar-logo{display:flex;align-items:center;gap:10px}
+.topbar-logo-icon{width:40px;height:40px;background:linear-gradient(135deg,var(--g2),var(--g4));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.topbar-logo-text .t1{font-size:16px;font-weight:900;color:var(--yellow);line-height:1}
+.topbar-logo-text .t2{font-size:11px;color:var(--muted)}
+.topbar-nav{display:flex;gap:4px}
+.nav-btn{
+  padding:8px 14px;border-radius:8px;border:none;
+  font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer;
+  background:transparent;color:var(--muted);transition:all 0.2s;
+  display:flex;align-items:center;gap:6px;
+}
+.nav-btn:hover{background:var(--border);color:var(--text)}
+.nav-btn.active{background:linear-gradient(135deg,var(--g2),var(--g3));color:white;box-shadow:0 4px 12px rgba(27,138,60,0.3)}
+.topbar-right{display:flex;align-items:center;gap:10px}
+.user-badge{
+  background:var(--border);border-radius:20px;padding:6px 14px;
+  font-size:13px;font-weight:700;color:var(--text);
+  display:flex;align-items:center;gap:8px;
+}
+.user-role{background:var(--g2);color:white;font-size:10px;padding:2px 8px;border-radius:10px;font-weight:800}
+.logout-btn{background:var(--red);color:white;border:none;padding:8px 14px;border-radius:8px;font-family:var(--font);font-size:13px;font-weight:700;cursor:pointer}
+
+/* ============================================================
+   PAGES
+============================================================ */
+.page{display:none;padding:20px;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* ============================================================
+   BILLING PAGE
+============================================================ */
+.billing-layout{display:grid;grid-template-columns:1fr 380px;gap:20px;height:calc(100vh - 80px)}
+
+/* LEFT — Product Search + Grid */
+.products-panel{display:flex;flex-direction:column;gap:14px;overflow:hidden}
+
+.search-section{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;
+}
+.search-row{display:flex;gap:10px;margin-bottom:12px}
+.search-input-wrap{
+  flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;
+  display:flex;align-items:center;gap:10px;padding:0 14px;
+}
+.search-input-wrap input{
+  flex:1;background:none;border:none;outline:none;
+  font-family:var(--font);font-size:15px;color:var(--text);padding:12px 0;
+}
+.search-input-wrap input::placeholder{color:var(--muted)}
+.si-icon{font-size:18px;color:var(--muted)}
+
+.cat-chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.cat-chips::-webkit-scrollbar{display:none}
+.cat-chip{
+  padding:6px 14px;border-radius:20px;border:1.5px solid var(--border);
+  font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer;
+  background:transparent;color:var(--muted);white-space:nowrap;transition:all 0.2s;
+}
+.cat-chip.active{background:var(--g2);color:white;border-color:var(--g2)}
+
+.products-scroll{overflow-y:auto;flex:1}
+.products-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;
+}
+.prod-card{
+  background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius-sm);
+  padding:12px;cursor:pointer;transition:all 0.2s;text-align:center;position:relative;
+  animation:popIn 0.3s ease both;
+}
+.prod-card:hover{border-color:var(--g3);background:var(--card2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(27,138,60,0.2)}
+.prod-card:active{transform:scale(0.96)}
+@keyframes popIn{from{opacity:0;transform:scale(0.9)}to{opacity:1;transform:scale(1)}}
+.pc-emoji{font-size:36px;margin-bottom:6px}
+.pc-name{font-size:12px;font-weight:700;color:var(--text);line-height:1.3;margin-bottom:4px}
+.pc-price{font-size:15px;font-weight:900;color:var(--g4)}
+.pc-unit{font-size:10px;color:var(--muted)}
+.pc-add-btn{
+  position:absolute;top:6px;right:6px;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--g2);color:white;border:none;
+  font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  opacity:0;transition:opacity 0.2s;
+}
+.prod-card:hover .pc-add-btn{opacity:1}
+
+/* RIGHT — Bill Panel */
+.bill-panel{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  display:flex;flex-direction:column;overflow:hidden;
+}
+.bill-header{
+  padding:16px 18px;border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,var(--g1),var(--card2));
+}
+.bill-header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.bill-title{font-size:16px;font-weight:900;color:var(--yellow)}
+.bill-no{font-size:11px;color:var(--muted);font-family:monospace}
+.customer-row{display:flex;gap:8px}
+.customer-input{
+  flex:1;background:var(--bg);border:1.5px solid var(--border);border-radius:8px;
+  padding:9px 12px;font-family:var(--font);font-size:13px;color:var(--text);outline:none;
+}
+.customer-input:focus{border-color:var(--g3)}
+
+.bill-items{flex:1;overflow-y:auto;padding:12px}
+.bill-empty{
+  height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  color:var(--muted);gap:10px;
+}
+.bill-empty-icon{font-size:48px;opacity:0.5}
+
+.bill-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 8px;border-bottom:1px solid var(--border);
+  animation:slideIn 0.2s ease;
+}
+@keyframes slideIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+.bi-emoji{font-size:22px;width:32px;text-align:center;flex-shrink:0}
+.bi-info{flex:1}
+.bi-name{font-size:13px;font-weight:700;color:var(--text)}
+.bi-price{font-size:11px;color:var(--muted)}
+.bi-controls{display:flex;align-items:center;gap:8px}
+.bi-qty-btn{
+  width:26px;height:26px;border-radius:50%;border:1.5px solid var(--g2);
+  background:transparent;color:var(--g4);font-size:16px;font-weight:700;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;
+}
+.bi-qty-btn:hover{background:var(--g2);color:white}
+.bi-qty{font-size:14px;font-weight:800;color:var(--text);min-width:20px;text-align:center}
+.bi-total{font-size:13px;font-weight:800;color:var(--g4);min-width:55px;text-align:right}
+.bi-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px 4px;transition:color 0.15s}
+.bi-del:hover{color:var(--red)}
+
+/* Bill Footer */
+.bill-footer{border-top:1px solid var(--border);padding:14px 16px}
+.bill-calc{margin-bottom:12px}
+.calc-row{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);padding:3px 0}
+.calc-row.total{font-size:18px;font-weight:900;color:var(--text);border-top:1px solid var(--border);padding-top:8px;margin-top:4px}
+.calc-row.total span:last-child{color:var(--g4)}
+
+/* GST toggle */
+.gst-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.gst-label{font-size:13px;color:var(--muted);font-weight:700}
+.gst-controls{display:flex;align-items:center;gap:8px}
+.gst-input{
+  width:60px;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;
+  padding:5px 8px;font-family:var(--font);font-size:13px;color:var(--text);outline:none;text-align:center;
+}
+.toggle-switch{position:relative;width:40px;height:22px;cursor:pointer}
+.toggle-switch input{display:none}
+.toggle-track{
+  width:100%;height:100%;background:var(--border);border-radius:11px;transition:background 0.3s;
+}
+.toggle-switch input:checked + .toggle-track{background:var(--g2)}
+.toggle-thumb{
+  position:absolute;top:3px;left:3px;width:16px;height:16px;
+  background:white;border-radius:50%;transition:transform 0.3s;box-shadow:0 2px 4px rgba(0,0,0,0.3);
+}
+.toggle-switch input:checked ~ .toggle-thumb{transform:translateX(18px)}
+
+.payment-select{
+  display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:12px;
+}
+.pay-opt{
+  padding:8px 4px;border-radius:8px;border:1.5px solid var(--border);
+  background:transparent;font-family:var(--font);font-size:11px;font-weight:700;
+  color:var(--muted);cursor:pointer;text-align:center;transition:all 0.2s;
+}
+.pay-opt.active{border-color:var(--g3);background:rgba(39,174,96,0.12);color:var(--g4)}
+
+.bill-actions{display:flex;gap:8px}
+.action-btn{
+  flex:1;padding:12px;border-radius:10px;border:none;
+  font-family:var(--font);font-size:13px;font-weight:800;cursor:pointer;transition:all 0.2s;
+}
+.btn-print{background:var(--border);color:var(--text)}
+.btn-print:hover{background:#2a4a2a}
+.btn-whatsapp{background:linear-gradient(135deg,#25D366,#128C7E);color:white}
+.btn-save{background:linear-gradient(135deg,var(--g2),var(--g4));color:white;box-shadow:0 4px 15px rgba(27,138,60,0.3)}
+.btn-save:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(27,138,60,0.4)}
+.btn-clear{background:rgba(229,57,53,0.15);color:var(--red);border:1.5px solid rgba(229,57,53,0.3)}
+
+/* ============================================================
+   DASHBOARD PAGE
+============================================================ */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.dash-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:20px;position:relative;overflow:hidden;
+  animation:fadeIn 0.4s ease both;
+}
+.dash-card::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:80px;height:80px;border-radius:50%;opacity:0.15;
+}
+.dash-card.green::before{background:var(--g3)}
+.dash-card.yellow::before{background:var(--yellow)}
+.dash-card.orange::before{background:var(--orange)}
+.dash-card.blue::before{background:var(--blue)}
+.dc-icon{font-size:28px;margin-bottom:10px}
+.dc-val{font-size:28px;font-weight:900;color:var(--text);line-height:1}
+.dc-label{font-size:12px;color:var(--muted);margin-top:4px}
+.dc-change{font-size:11px;margin-top:6px;font-weight:700}
+.dc-change.up{color:var(--g4)}
+
+.section-head{font-size:16px;font-weight:800;color:var(--text);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+
+/* Bills Table */
+.bills-table{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.table-header{
+  display:grid;grid-template-columns:80px 1fr 100px 100px 120px 80px;
+  padding:12px 16px;background:var(--g1);
+  font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;
+}
+.table-row{
+  display:grid;grid-template-columns:80px 1fr 100px 100px 120px 80px;
+  padding:12px 16px;border-bottom:1px solid var(--border);
+  font-size:13px;transition:background 0.15s;align-items:center;
+}
+.table-row:hover{background:var(--card2)}
+.table-row:last-child{border-bottom:none}
+.bill-status{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;display:inline-block}
+.status-paid{background:rgba(39,174,96,0.15);color:var(--g4)}
+.status-cod{background:rgba(255,214,0,0.15);color:var(--yellow)}
+.status-upi{background:rgba(21,101,192,0.15);color:#64b5f6}
+
+/* ============================================================
+   PRODUCTS MANAGEMENT PAGE
+============================================================ */
+.prod-mgmt-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.add-prod-btn{
+  background:linear-gradient(135deg,var(--g2),var(--g4));color:white;
+  border:none;padding:11px 20px;border-radius:10px;
+  font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+}
+.prod-mgmt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.pm-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px;display:flex;flex-direction:column;gap:10px;
+  animation:popIn 0.3s ease both;
+}
+.pm-card-top{display:flex;align-items:center;gap:12px}
+.pm-emoji{font-size:36px;width:56px;height:56px;background:var(--bg);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.pm-info{flex:1}
+.pm-name{font-size:14px;font-weight:800;color:var(--text)}
+.pm-cat{font-size:11px;color:var(--muted);margin-top:2px}
+.pm-price-row{display:flex;align-items:center;justify-content:space-between}
+.pm-price{font-size:18px;font-weight:900;color:var(--g4)}
+.pm-unit{font-size:11px;color:var(--muted);background:var(--border);padding:2px 8px;border-radius:6px}
+.pm-actions{display:flex;gap:8px}
+.pm-btn{flex:1;padding:8px;border-radius:8px;border:none;font-family:var(--font);font-size:12px;font-weight:700;cursor:pointer}
+.pm-edit{background:rgba(21,101,192,0.15);color:#64b5f6}
+.pm-del{background:rgba(229,57,53,0.15);color:var(--red)}
+.pm-toggle{background:rgba(39,174,96,0.15);color:var(--g4)}
+.pm-toggle.off{background:rgba(229,57,53,0.1);color:#ef9a9a}
+
+/* ============================================================
+   MODAL
+============================================================ */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.8);backdrop-filter:blur(6px);
+  z-index:2000;align-items:center;justify-content:center;padding:20px;
+}
+.modal-overlay.open{display:flex}
+.modal-box{
+  background:var(--card);border:1px solid var(--border);border-radius:20px;
+  padding:28px;width:100%;max-width:480px;
+  box-shadow:var(--shadow);
+  animation:modalIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes modalIn{from{opacity:0;transform:scale(0.85)}to{opacity:1;transform:scale(1)}}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.modal-title{font-size:18px;font-weight:900;color:var(--text)}
+.modal-close{background:var(--border);border:none;color:var(--muted);width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center}
+.modal-form{display:flex;flex-direction:column;gap:14px}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.mf-group{display:flex;flex-direction:column;gap:6px}
+.mf-group label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px}
+.mf-group input,.mf-group select,.mf-group textarea{
+  background:var(--bg);border:1.5px solid var(--border);border-radius:8px;
+  padding:11px 14px;font-family:var(--font);font-size:14px;color:var(--text);outline:none;
+}
+.mf-group input:focus,.mf-group select:focus{border-color:var(--g3)}
+.mf-group select option{background:var(--card)}
+.modal-actions{display:flex;gap:10px;margin-top:6px}
+.modal-save{flex:1;background:linear-gradient(135deg,var(--g2),var(--g4));color:white;border:none;padding:13px;border-radius:10px;font-family:var(--font);font-size:15px;font-weight:800;cursor:pointer}
+.modal-cancel{background:var(--border);color:var(--muted);border:none;padding:13px 20px;border-radius:10px;font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer}
+
+/* ============================================================
+   PRINT RECEIPT
+============================================================ */
+#print-area{display:none}
+@media print{
+  body>*{display:none!important}
+  #print-area{display:block!important;font-family:'Courier New',monospace;width:80mm;margin:0 auto;font-size:12px;color:#000}
+  .pr-center{text-align:center}
+  .pr-line{border-top:1px dashed #000;margin:6px 0}
+  .pr-row{display:flex;justify-content:space-between}
+  .pr-bold{font-weight:bold}
+  .pr-big{font-size:16px;font-weight:bold}
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+#toast{
+  position:fixed;bottom:30px;left:50%;transform:translateX(-50%);
+  background:linear-gradient(135deg,var(--g2),var(--g4));
+  color:white;padding:12px 24px;border-radius:25px;
+  font-size:14px;font-weight:700;z-index:9999;
+  box-shadow:0 8px 32px rgba(27,138,60,0.4);
+  opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .billing-layout{grid-template-columns:1fr;height:auto}
+  .bill-panel{height:500px}
+  .table-header,.table-row{grid-template-columns:60px 1fr 80px 80px}
+  .table-header span:nth-child(4),.table-row span:nth-child(4),
+  .table-header span:nth-child(5),.table-row span:nth-child(5){display:none}
+  .topbar-nav .nav-btn span{display:none}
+}
+@media(max-width:600px){
+  .topbar{padding:10px 14px}
+  .page{padding:12px}
+  .dash-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ==================== LOGIN PAGE ==================== -->
+<div id="login-page">
+  <div class="login-bg-circles">
+    <div class="lbc"></div><div class="lbc"></div><div class="lbc"></div>
+  </div>
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="login-logo-icon">🌿</div>
+      <h1>हरी जी की दुकान</h1>
+      <p>Billing & Management Software</p>
+    </div>
+
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchRole('owner')">👑 Owner</button>
+      <button class="login-tab" onclick="switchRole('cashier')">💼 Cashier</button>
+      <button class="login-tab" onclick="switchRole('manager')">📊 Manager</button>
+    </div>
+
+    <div class="login-form">
+      <div class="form-field">
+        <label>Username</label>
+        <input type="text" id="login-user" placeholder="अपना नाम डालें..." value="owner">
+      </div>
+      <div class="form-field">
+        <label>Password</label>
+        <input type="password" id="login-pass" placeholder="Password डालें..." value="hari123" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="login-btn" onclick="doLogin()">
+        🚀 Login करें
+      </button>
+    </div>
+    <div class="login-hint">
+      Default: Owner → <strong>hari123</strong> | Cashier → <strong>cash123</strong>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== MAIN APP ==================== -->
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="topbar-logo">
+        <div class="topbar-logo-icon">🌿</div>
+        <div class="topbar-logo-text">
+          <div class="t1">हरी जी</div>
+          <div class="t2">Billing Software</div>
+        </div>
+      </div>
+      <div class="topbar-nav" id="topbar-nav">
+        <button class="nav-btn active" onclick="showPage('billing')">🧾 <span>Billing</span></button>
+        <button class="nav-btn" onclick="showPage('dashboard')">📊 <span>Dashboard</span></button>
+        <button class="nav-btn" onclick="showPage('products')">📦 <span>Products</span></button>
+      </div>
+    </div>
+    <div class="topbar-right">
+      <div class="user-badge">
+        <span id="topbar-username">Owner</span>
+        <span class="user-role" id="topbar-role">Owner</span>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">Logout</button>
+    </div>
+  </div>
+
+  <!-- ===== BILLING PAGE ===== -->
+  <div class="page active" id="page-billing">
+    <div class="billing-layout">
+
+      <!-- LEFT: Products -->
+      <div class="products-panel">
+        <div class="search-section">
+          <div class="search-row">
+            <div class="search-input-wrap">
+              <span class="si-icon">🔍</span>
+              <input type="text" id="prod-search" placeholder="Product खोजें... चावल, दाल, तेल" oninput="filterBillingProducts()">
+            </div>
+          </div>
+          <div class="cat-chips" id="billing-cats"></div>
+        </div>
+        <div class="products-scroll">
+          <div class="products-grid" id="billing-products"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Bill -->
+      <div class="bill-panel">
+        <div class="bill-header">
+          <div class="bill-header-top">
+            <span class="bill-title">🧾 नया बिल</span>
+            <span class="bill-no" id="bill-number">BILL #001</span>
+          </div>
+          <div class="customer-row">
+            <input type="text" class="customer-input" id="cust-name" placeholder="👤 Customer नाम (optional)">
+            <input type="text" class="customer-input" id="cust-phone" placeholder="📞 Phone">
+          </div>
+        </div>
+
+        <div class="bill-items" id="bill-items-wrap">
+          <div class="bill-empty" id="bill-empty">
+            <div class="bill-empty-icon">🛒</div>
+            <div>Product select करें</div>
+            <div style="font-size:12px;color:var(--muted)">Left side से product click करें</div>
+          </div>
+          <div id="bill-items-list"></div>
+        </div>
+
+        <div class="bill-footer">
+          <!-- GST Toggle -->
+          <div class="gst-row">
+            <span class="gst-label">GST लगाएं?</span>
+            <div class="gst-controls">
+              <input type="number" class="gst-input" id="gst-rate" value="5" min="0" max="28" onchange="recalcBill()">
+              <span style="font-size:12px;color:var(--muted)">%</span>
+              <label class="toggle-switch">
+                <input type="checkbox" id="gst-toggle" onchange="recalcBill()">
+                <div class="toggle-track"></div>
+                <div class="toggle-thumb"></div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Totals -->
+          <div class="bill-calc">
+            <div class="calc-row"><span>Subtotal</span><span id="calc-sub">₹0</span></div>
+            <div class="calc-row" id="calc-gst-row" style="display:none"><span>GST (<span id="gst-label">5</span>%)</span><span id="calc-gst">₹0</span></div>
+            <div class="calc-row"><span>Discount</span>
+              <span><input type="number" style="width:60px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:3px 6px;font-family:var(--font);font-size:12px;color:var(--text);outline:none;text-align:center" id="discount" value="0" min="0" onchange="recalcBill()"> ₹</span>
+            </div>
+            <div class="calc-row total"><span>कुल</span><span id="calc-total">₹0</span></div>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="payment-select">
+            <button class="pay-opt active" onclick="selectPay(this,'COD')">💵 COD</button>
+            <button class="pay-opt" onclick="selectPay(this,'UPI')">📱 UPI</button>
+            <button class="pay-opt" onclick="selectPay(this,'Cash')">💰 Cash</button>
+          </div>
+
+          <!-- Actions -->
+          <div class="bill-actions">
+            <button class="action-btn btn-clear" onclick="clearBill()">🗑️</button>
+            <button class="action-btn btn-print" onclick="printBill()">🖨️ Print</button>
+            <button class="action-btn btn-whatsapp" onclick="sendWhatsApp()">📲</button>
+            <button class="action-btn btn-save" onclick="saveBill()">✅ Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DASHBOARD PAGE ===== -->
+  <div class="page" id="page-dashboard">
+    <div class="section-head">📊 आज का Overview</div>
+    <div class="dash-grid">
+      <div class="dash-card green">
+        <div class="dc-icon">💰</div>
+        <div class="dc-val" id="d-sales">₹0</div>
+        <div class="dc-label">आज की कमाई</div>
+        <div class="dc-change up" id="d-sales-change">↑ अच्छा!</div>
+      </div>
+      <div class="dash-card yellow">
+        <div class="dc-icon">🧾</div>
+        <div class="dc-val" id="d-bills">0</div>
+        <div class="dc-label">आज के Bills</div>
+      </div>
+      <div class="dash-card orange">
+        <div class="dc-icon">🛒</div>
+        <div class="dc-val" id="d-items">0</div>
+        <div class="dc-label">Items बिके</div>
+      </div>
+      <div class="dash-card blue">
+        <div class="dc-icon">📦</div>
+        <div class="dc-val" id="d-prods">0</div>
+        <div class="dc-label">Total Products</div>
+      </div>
+    </div>
+
+    <div class="section-head">📋 Recent Bills</div>
+    <div class="bills-table">
+      <div class="table-header">
+        <span>Bill #</span>
+        <span>Customer</span>
+        <span>Amount</span>
+        <span>Payment</span>
+        <span>Time</span>
+        <span>Status</span>
+      </div>
+      <div id="bills-table-body"></div>
+    </div>
+  </div>
+
+  <!-- ===== PRODUCTS PAGE ===== -->
+  <div class="page" id="page-products">
+    <div class="prod-mgmt-header">
+      <div class="section-head" style="margin:0">📦 Products Management</div>
+      <button class="add-prod-btn" onclick="openAddProduct()">➕ नया Product</button>
+    </div>
+    <div class="prod-mgmt-grid" id="prod-mgmt-grid"></div>
+  </div>
+
+</div><!-- end app -->
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="modal-overlay" id="prod-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-title">➕ नया Product</span>
+      <button class="modal-close" onclick="closeModal('prod-modal')">✕</button>
+    </div>
+    <div class="modal-form">
+      <div class="modal-grid">
+        <div class="mf-group" style="grid-column:1/-1">
+          <label>Product का नाम *</label>
+          <input type="text" id="mf-name" placeholder="जैसे: चावल, दाल, तेल...">
+        </div>
+        <div class="mf-group">
+          <label>कीमत (₹) *</label>
+          <input type="number" id="mf-price" placeholder="60">
+        </div>
+        <div class="mf-group">
+          <label>Unit</label>
+          <input type="text" id="mf-unit" placeholder="1kg, 250g, pcs...">
+        </div>
+        <div class="mf-group">
+          <label>Category *</label>
+          <select id="mf-cat">
+            <option value="">-- चुनें --</option>
+            <option>नाश्ता</option>
+            <option>किराना सामान</option>
+            <option>स्नैक्स</option>
+            <option>तेल, मसाला</option>
+            <option>साबुन, देखभाल</option>
+            <option>दवाई</option>
+          </select>
+        </div>
+        <div class="mf-group">
+          <label>Emoji</label>
+          <input type="text" id="mf-emoji" placeholder="🍚" style="font-size:20px">
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal('prod-modal')">रद्द करें</button>
+        <button class="modal-save" onclick="saveProduct()">💾 Save करें</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PRINT AREA ===== -->
+<div id="print-area"></div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+// ============================================================
+//  DATA
+// ============================================================
+const USERS = {
+  owner:   { pass:'hari123',   role:'Owner',   name:'हरी जी' },
+  cashier: { pass:'cash123',   role:'Cashier', name:'Cashier' },
+  manager: { pass:'manager123',role:'Manager', name:'Manager' },
+};
+
+let PRODUCTS = JSON.parse(localStorage.getItem('billing_products') || 'null') || [
+  {id:1, name:'लिट्ठी चोखा',     price:40,  unit:'2pcs', cat:'नाश्ता',        emoji:'🍛', active:true},
+  {id:2, name:'समोसा',           price:20,  unit:'2pcs', cat:'नाश्ता',        emoji:'🥟', active:true},
+  {id:3, name:'पकौड़ी',          price:30,  unit:'Plate',cat:'नाश्ता',        emoji:'🍘', active:true},
+  {id:4, name:'छाछ',             price:20,  unit:'1L',   cat:'नाश्ता',        emoji:'🥛', active:true},
+  {id:5, name:'चावल',            price:60,  unit:'1kg',  cat:'किराना सामान',  emoji:'🍚', active:true},
+  {id:6, name:'आटा',             price:35,  unit:'1kg',  cat:'किराना सामान',  emoji:'🌾', active:true},
+  {id:7, name:'अरहर दाल',        price:80,  unit:'1kg',  cat:'किराना सामान',  emoji:'🫘', active:true},
+  {id:8, name:'चाय पत्ती',       price:120, unit:'500g', cat:'किराना सामान',  emoji:'🍵', active:true},
+  {id:9, name:'चीनी',            price:45,  unit:'1kg',  cat:'किराना सामान',  emoji:'🍬', active:true},
+  {id:10,name:'सरसों तेल',       price:140, unit:'1L',   cat:'तेल, मसाला',   emoji:'🛢️', active:true},
+  {id:11,name:'हल्दी पाउडर',     price:30,  unit:'100g', cat:'तेल, मसाला',   emoji:'🟡', active:true},
+  {id:12,name:'बिस्कुट',         price:10,  unit:'Pack', cat:'स्नैक्स',       emoji:'🍪', active:true},
+  {id:13,name:'नमकीन',          price:25,  unit:'250g', cat:'स्नैक्स',       emoji:'🥨', active:true},
+  {id:14,name:'नहाने का साबुन', price:25,  unit:'1pc',  cat:'साबुन, देखभाल', emoji:'🧼', active:true},
+  {id:15,name:'पैरासिटामोल',    price:15,  unit:'10tabs',cat:'दवाई',          emoji:'💊', active:true},
+];
+
+let BILLS    = JSON.parse(localStorage.getItem('billing_bills') || '[]');
+let billCart = [];
+let currentUser = null;
+let currentRole = 'owner';
+let editingProdId = null;
+let selectedPayment = 'COD';
+let billingFilter = 'All';
+
+// ============================================================
+//  LOGIN
+// ============================================================
+function switchRole(role) {
+  currentRole = role;
+  document.querySelectorAll('.login-tab').forEach((t,i) => t.classList.toggle('active', ['owner','cashier','manager'][i]===role));
+  const presets = {owner:'hari123', cashier:'cash123', manager:'manager123'};
+  document.getElementById('login-user').value = role;
+  document.getElementById('login-pass').value = presets[role] || '';
+}
+
+function doLogin() {
+  const user = document.getElementById('login-user').value.trim().toLowerCase();
+  const pass = document.getElementById('login-pass').value;
+  const u = USERS[user];
+  if (!u || u.pass !== pass) { showToast('❌ गलत Username या Password!'); return; }
+  currentUser = { ...u, username: user };
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('topbar-username').textContent = u.name;
+  document.getElementById('topbar-role').textContent = u.role;
+  // Cashier can't access products page
+  if (u.role === 'Cashier') document.querySelector('[onclick="showPage(\'products\')"]').style.display='none';
+  initApp();
+}
+
+function doLogout() {
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('login-page').style.display = 'flex';
+  clearBill();
+}
+
+// ============================================================
+//  APP INIT
+// ============================================================
+function initApp() {
+  generateBillNumber();
+  renderBillingCats();
+  renderBillingProducts();
+  renderProdMgmt();
+  updateDashboard();
+}
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelector(`[onclick="showPage('${name}')"]`).classList.add('active');
+  if (name==='dashboard') updateDashboard();
+  if (name==='products')  renderProdMgmt();
+}
+
+// ============================================================
+//  BILLING — Products Panel
+// ============================================================
+function renderBillingCats() {
+  const cats = ['All', ...new Set(PRODUCTS.filter(p=>p.active).map(p=>p.cat))];
+  const icons = {'नाश्ता':'🍛','किराना सामान':'🌾','स्नैक्स':'🍪','तेल, मसाला':'🫙','साबुन, देखभाल':'🧼','दवाई':'💊'};
+  document.getElementById('billing-cats').innerHTML = cats.map(c =>
+    `<button class="cat-chip ${c==='All'?'active':''}" onclick="setBillingCat(this,'${c}')">${c==='All'?'🛍️ सभी':(icons[c]||'🏷️')+' '+c}</button>`
+  ).join('');
+}
+
+function setBillingCat(el, cat) {
+  document.querySelectorAll('.cat-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  billingFilter = cat;
+  renderBillingProducts();
+}
+
+function filterBillingProducts() {
+  renderBillingProducts(document.getElementById('prod-search').value);
+}
+
+function renderBillingProducts(q='') {
+  let list = PRODUCTS.filter(p => p.active);
+  if (billingFilter !== 'All') list = list.filter(p => p.cat === billingFilter);
+  if (q.trim()) { const lq=q.toLowerCase(); list=list.filter(p=>p.name.toLowerCase().includes(lq)); }
+
+  document.getElementById('billing-products').innerHTML = list.map((p,i) => `
+    <div class="prod-card" onclick="addToBill(${p.id})" style="animation-delay:${i*0.03}s">
+      <button class="pc-add-btn" onclick="event.stopPropagation();addToBill(${p.id})">+</button>
+      <div class="pc-emoji">${p.emoji}</div>
+      <div class="pc-name">${p.name}</div>
+      <div class="pc-price">₹${p.price}</div>
+      <div class="pc-unit">${p.unit}</div>
+    </div>`).join('') || `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">कोई product नहीं मिला</div>`;
+}
+
+// ============================================================
+//  BILL CART
+// ============================================================
+function addToBill(id) {
+  const prod = PRODUCTS.find(p=>p.id===id);
+  if (!prod) return;
+  const ex = billCart.find(i=>i.id===id);
+  if (ex) ex.qty++;
+  else billCart.push({...prod, qty:1});
+  renderBillItems();
+  showToast(`✅ ${prod.name} जोड़ा!`);
+}
+
+function changeQty(id, delta) {
+  const item = billCart.find(i=>i.id===id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) billCart = billCart.filter(i=>i.id!==id);
+  renderBillItems();
+}
+
+function renderBillItems() {
+  const wrap = document.getElementById('bill-items-list');
+  const empty = document.getElementById('bill-empty');
+  empty.style.display = billCart.length === 0 ? 'flex' : 'none';
+
+  wrap.innerHTML = billCart.map(item => `
+    <div class="bill-item">
+      <div class="bi-emoji">${item.emoji}</div>
+      <div class="bi-info">
+        <div class="bi-name">${item.name}</div>
+        <div class="bi-price">₹${item.price} × ${item.qty}</div>
+      </div>
+      <div class="bi-controls">
+        <button class="bi-qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+        <span class="bi-qty">${item.qty}</span>
+        <button class="bi-qty-btn" onclick="changeQty(${item.id},+1)">+</button>
+      </div>
+      <div class="bi-total">₹${item.price*item.qty}</div>
+      <button class="bi-del" onclick="billCart=billCart.filter(i=>i.id!==${item.id});renderBillItems()">✕</button>
+    </div>`).join('');
+  recalcBill();
+}
+
+function recalcBill() {
+  const sub = billCart.reduce((s,i)=>s+i.price*i.qty,0);
+  const gstOn = document.getElementById('gst-toggle').checked;
+  const gstRate = parseFloat(document.getElementById('gst-rate').value)||0;
+  const disc = parseFloat(document.getElementById('discount').value)||0;
+  const gst = gstOn ? Math.round(sub * gstRate/100) : 0;
+  const total = sub + gst - disc;
+
+  document.getElementById('calc-sub').textContent   = '₹'+sub;
+  document.getElementById('calc-gst').textContent   = '₹'+gst;
+  document.getElementById('calc-total').textContent = '₹'+Math.max(0,total);
+  document.getElementById('gst-label').textContent  = gstRate;
+  document.getElementById('calc-gst-row').style.display = gstOn ? 'flex' : 'none';
+}
+
+function selectPay(el, method) {
+  document.querySelectorAll('.pay-opt').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  selectedPayment = method;
+}
+
+function clearBill() {
+  billCart=[];
+  document.getElementById('cust-name').value='';
+  document.getElementById('cust-phone').value='';
+  document.getElementById('discount').value=0;
+  document.getElementById('gst-toggle').checked=false;
+  document.querySelectorAll('.pay-opt').forEach((b,i)=>b.classList.toggle('active',i===0));
+  selectedPayment='COD';
+  renderBillItems();
+}
+
+// ============================================================
+//  SAVE BILL
+// ============================================================
+function generateBillNumber() {
+  const n = (BILLS.length+1).toString().padStart(3,'0');
+  document.getElementById('bill-number').textContent = 'BILL #'+n;
+}
+
+function getBillData() {
+  const sub  = billCart.reduce((s,i)=>s+i.price*i.qty,0);
+  const gstOn = document.getElementById('gst-toggle').checked;
+  const gstRate = parseFloat(document.getElementById('gst-rate').value)||0;
+  const disc = parseFloat(document.getElementById('discount').value)||0;
+  const gst  = gstOn ? Math.round(sub*gstRate/100) : 0;
+  const total= Math.max(0, sub+gst-disc);
+  return {
+    id: BILLS.length+1,
+    billNo: 'BILL #'+(BILLS.length+1).toString().padStart(3,'0'),
+    custName: document.getElementById('cust-name').value||'Walk-in Customer',
+    custPhone: document.getElementById('cust-phone').value||'',
+    items: [...billCart],
+    sub, gst, gstRate: gstOn?gstRate:0, disc, total,
+    payment: selectedPayment,
+    time: new Date().toLocaleString('hi-IN'),
+    cashier: currentUser?.name || 'Owner',
+    date: new Date().toLocaleDateString('hi-IN'),
+  };
+}
+
+function saveBill() {
+  if (billCart.length===0) { showToast('⚠️ Bill खाली है!'); return; }
+  const bill = getBillData();
+  BILLS.push(bill);
+  localStorage.setItem('billing_bills', JSON.stringify(BILLS));
+  showToast('✅ Bill #'+bill.id+' Save हो गया! कुल ₹'+bill.total);
+  clearBill();
+  generateBillNumber();
+}
+
+// ============================================================
+//  PRINT
+// ============================================================
+function printBill() {
+  if (billCart.length===0) { showToast('⚠️ Bill खाली है!'); return; }
+  const b = getBillData();
+  const items = b.items.map(i=>`
+    <div class="pr-row"><span>${i.emoji} ${i.name} ×${i.qty}</span><span>₹${i.price*i.qty}</span></div>`).join('');
+
+  document.getElementById('print-area').innerHTML = `
+    <div class="pr-center pr-big">🌿 हरी जी की दुकान</div>
+    <div class="pr-center" style="font-size:10px">बिहार | +91 95254 99540</div>
+    <div class="pr-center" style="font-size:10px">सुबह 7 से रात 9 बजे तक</div>
+    <div class="pr-line"></div>
+    <div class="pr-row"><span>${b.billNo}</span><span>${b.date}</span></div>
+    <div>Customer: ${b.custName}</div>
+    ${b.custPhone?`<div>Phone: ${b.custPhone}</div>`:''}
+    <div class="pr-line"></div>
+    <div class="pr-bold">Items:</div>
+    ${items}
+    <div class="pr-line"></div>
+    <div class="pr-row"><span>Subtotal</span><span>₹${b.sub}</span></div>
+    ${b.gst>0?`<div class="pr-row"><span>GST (${b.gstRate}%)</span><span>₹${b.gst}</span></div>`:''}
+    ${b.disc>0?`<div class="pr-row"><span>Discount</span><span>-₹${b.disc}</span></div>`:''}
+    <div class="pr-line"></div>
+    <div class="pr-row pr-bold pr-big"><span>कुल</span><span>₹${b.total}</span></div>
+    <div class="pr-line"></div>
+    <div class="pr-center">Payment: ${b.payment}</div>
+    <div class="pr-center" style="margin-top:10px">धन्यवाद! 🙏</div>
+    <div class="pr-center" style="font-size:10px">कृपया फिर आएं</div>
+  `;
+  window.print();
+}
+
+// ============================================================
+//  WHATSAPP
+// ============================================================
+function sendWhatsApp() {
+  if (billCart.length===0) { showToast('⚠️ Bill खाली है!'); return; }
+  const b = getBillData();
+  const items = b.items.map(i=>`• ${i.name} ×${i.qty} = ₹${i.price*i.qty}`).join('\n');
+  const msg = `🧾 *${b.billNo}* — हरी जी की दुकान\n📅 ${b.date}\n👤 ${b.custName}\n\n*Items:*\n${items}\n\n💰 Subtotal: ₹${b.sub}${b.gst>0?`\nGST: ₹${b.gst}`:''}${b.disc>0?`\nDiscount: -₹${b.disc}`:''}\n*कुल: ₹${b.total}*\n💳 Payment: ${b.payment}\n\nधन्यवाद! 🙏`;
+  const phone = b.custPhone ? b.custPhone.replace(/\D/g,'') : '919525499540';
+  const num = phone.length===10 ? '91'+phone : phone;
+  window.open(`https://wa.me/${num}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ============================================================
+//  DASHBOARD
+// ============================================================
+function updateDashboard() {
+  const today = new Date().toLocaleDateString('hi-IN');
+  const todayBills = BILLS.filter(b=>b.date===today);
+  const sales = todayBills.reduce((s,b)=>s+b.total,0);
+  const items = todayBills.reduce((s,b)=>s+b.items.reduce((ss,i)=>ss+i.qty,0),0);
+
+  document.getElementById('d-sales').textContent  = '₹'+sales;
+  document.getElementById('d-bills').textContent  = todayBills.length;
+  document.getElementById('d-items').textContent  = items;
+  document.getElementById('d-prods').textContent  = PRODUCTS.filter(p=>p.active).length;
+  document.getElementById('d-sales-change').textContent = sales>0?'↑ बढ़िया चल रहा है!':'आज का पहला bill करें!';
+
+  // Bills table — last 20
+  const recent = [...BILLS].reverse().slice(0,20);
+  document.getElementById('bills-table-body').innerHTML = recent.length===0
+    ? `<div style="text-align:center;padding:40px;color:var(--muted)">अभी कोई bill नहीं है</div>`
+    : recent.map(b=>`
+      <div class="table-row">
+        <span style="font-family:monospace;font-size:12px;color:var(--muted)">${b.billNo}</span>
+        <span style="font-weight:700">${b.custName}</span>
+        <span style="font-weight:800;color:var(--g4)">₹${b.total}</span>
+        <span><span class="bill-status status-${b.payment.toLowerCase()}">${b.payment}</span></span>
+        <span style="font-size:12px;color:var(--muted)">${b.time}</span>
+        <span><span class="bill-status status-paid">Paid</span></span>
+      </div>`).join('');
+}
+
+// ============================================================
+//  PRODUCTS MANAGEMENT
+// ============================================================
+function renderProdMgmt() {
+  document.getElementById('prod-mgmt-grid').innerHTML = PRODUCTS.map(p=>`
+    <div class="pm-card">
+      <div class="pm-card-top">
+        <div class="pm-emoji">${p.emoji}</div>
+        <div class="pm-info">
+          <div class="pm-name">${p.name}</div>
+          <div class="pm-cat">${p.cat}</div>
+        </div>
+      </div>
+      <div class="pm-price-row">
+        <span class="pm-price">₹${p.price}</span>
+        <span class="pm-unit">${p.unit}</span>
+      </div>
+      <div class="pm-actions">
+        <button class="pm-btn pm-toggle ${p.active?'':'off'}" onclick="toggleProd(${p.id})">${p.active?'✅ Active':'❌ Hidden'}</button>
+        <button class="pm-btn pm-edit" onclick="openEditProduct(${p.id})">✏️ Edit</button>
+        <button class="pm-btn pm-del" onclick="deleteProd(${p.id})">🗑️</button>
+      </div>
+    </div>`).join('');
+}
+
+function openAddProduct() {
+  editingProdId = null;
+  document.getElementById('modal-title').textContent = '➕ नया Product';
+  ['mf-name','mf-price','mf-unit','mf-emoji','mf-cat'].forEach(id=>{
+    document.getElementById(id).value='';
+  });
+  openModal('prod-modal');
+}
+
+function openEditProduct(id) {
+  const p = PRODUCTS.find(p=>p.id===id);
+  if (!p) return;
+  editingProdId = id;
+  document.getElementById('modal-title').textContent = '✏️ Product Edit';
+  document.getElementById('mf-name').value  = p.name;
+  document.getElementById('mf-price').value = p.price;
+  document.getElementById('mf-unit').value  = p.unit;
+  document.getElementById('mf-emoji').value = p.emoji;
+  document.getElementById('mf-cat').value   = p.cat;
+  openModal('prod-modal');
+}
+
+function saveProduct() {
+  const name  = document.getElementById('mf-name').value.trim();
+  const price = parseFloat(document.getElementById('mf-price').value);
+  const unit  = document.getElementById('mf-unit').value.trim();
+  const emoji = document.getElementById('mf-emoji').value.trim()||'🛍️';
+  const cat   = document.getElementById('mf-cat').value;
+  if (!name||!price||!cat) { showToast('⚠️ नाम, कीमत और Category ज़रूरी है!'); return; }
+
+  if (editingProdId) {
+    const idx = PRODUCTS.findIndex(p=>p.id===editingProdId);
+    if (idx>-1) PRODUCTS[idx] = {...PRODUCTS[idx], name, price, unit, emoji, cat};
+    showToast('✅ Product update हो गया!');
+  } else {
+    const newId = Math.max(0,...PRODUCTS.map(p=>p.id))+1;
+    PRODUCTS.push({id:newId, name, price, unit, emoji, cat, active:true});
+    showToast('✅ नया Product जोड़ा गया!');
+  }
+  localStorage.setItem('billing_products', JSON.stringify(PRODUCTS));
+  closeModal('prod-modal');
+  renderProdMgmt();
+  renderBillingCats();
+  renderBillingProducts();
+}
+
+function toggleProd(id) {
+  const p = PRODUCTS.find(p=>p.id===id);
+  if (!p) return;
+  p.active = !p.active;
+  localStorage.setItem('billing_products', JSON.stringify(PRODUCTS));
+  renderProdMgmt(); renderBillingProducts(); renderBillingCats();
+  showToast(p.active ? '✅ Product active हो गया!' : '❌ Product hide हो गया!');
+}
+
+function deleteProd(id) {
+  if (!confirm('यह product delete करना चाहते हैं?')) return;
+  PRODUCTS = PRODUCTS.filter(p=>p.id!==id);
+  localStorage.setItem('billing_products', JSON.stringify(PRODUCTS));
+  renderProdMgmt(); renderBillingProducts(); renderBillingCats();
+  showToast('🗑️ Product हटा दिया गया!');
+}
+
+// ============================================================
+//  MODAL HELPERS
+// ============================================================
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+document.querySelectorAll('.modal-overlay').forEach(o=>{
+  o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+});
+
+// ============================================================
+//  TOAST
+// ============================================================
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity='1';
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>{ t.style.opacity='0'; }, 2500);
+}
+</script>
+</body>
+</html>
